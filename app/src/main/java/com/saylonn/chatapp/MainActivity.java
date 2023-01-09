@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -61,7 +64,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         LoginDialog loginDialog = new LoginDialog();
-        loginDialog.show(ft, "login");
+
+        EditText loginField = findViewById(R.id.loginDialogEmail);
+        EditText passwordField = findViewById(R.id.loginDialogPassword);
+        Button loginButton = findViewById(R.id.loginButton);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginField.setText("hello");
+            }
+        });
+
+                loginDialog.show(ft, "login");
     }
     private void showNotificationNotAllowedDialog(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
