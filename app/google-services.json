@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "536378465069",
+    "project_id": "api-messenger-fd444",
+    "storage_bucket": "api-messenger-fd444.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536378465069:android:84838fda77d36e4ec7d1a4",
+        "android_client_info": {
+          "package_name": "com.saylonn.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536378465069-vpa6iq1tsf1tdlj2qni4of716bnmq3rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoRsaPhxsDm17BMJBXGeNMEVPbV71Im_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "536378465069-vpa6iq1tsf1tdlj2qni4of716bnmq3rc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536378465069:android:a7a679a184e3cdf5c7d1a4",
+        "android_client_info": {
+          "package_name": "com.saylonn.messenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536378465069-vpa6iq1tsf1tdlj2qni4of716bnmq3rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoRsaPhxsDm17BMJBXGeNMEVPbV71Im_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "536378465069-vpa6iq1tsf1tdlj2qni4of716bnmq3rc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
