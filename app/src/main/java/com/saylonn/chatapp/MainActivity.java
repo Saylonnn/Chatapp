@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -66,8 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void showLoginDialog(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        LoginDialog loginDialog = new LoginDialog();
-        loginDialog.show(ft, "login");
+
+
+        LoginDialog loginDialog = new LoginDialog(MainActivity.this);
+        loginDialog.setCancelable(false);
+        loginDialog.show();
     }
     private void showNotificationNotAllowedDialog(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
