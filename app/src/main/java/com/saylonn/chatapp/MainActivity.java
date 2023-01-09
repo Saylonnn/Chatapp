@@ -3,6 +3,9 @@ package com.saylonn.chatapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
         String username = sp.getString("login_username", "empty");
@@ -51,8 +55,20 @@ public class MainActivity extends AppCompatActivity {
     private void showLoginDialog(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-
         LoginDialog loginDialog = new LoginDialog();
+        loginDialog.setCancelable(false);
+
+        EditText loginField = findViewById(R.id.loginDialogEmail);
+        EditText passwordField = findViewById(R.id.loginDialogPassword);
+        Button loginButton = findViewById(R.id.loginButton);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginDialog.dismiss();
+            }
+        });
+
         loginDialog.show(ft, "login");
     }
 
