@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,29 +23,26 @@ import java.util.Map;
 public class VolleyRequest {
     private static final String TAG = "VolleyRequest";
     private List<CallbackInterface> callbackApps = new ArrayList<>();
-    RequestQueue queue;
     String url = "https://www.api.caylonn.de:1337";
-    Context context;
-    MyFirebaseMessagingService fms = new MyFirebaseMessagingService();
 
-    public VolleyRequest(Context context){
-        this.context = context;
-        queue = Volley.newRequestQueue(context);
-    }
 
-    public void login(String email, String password){
-        Log.d(TAG, "login called with "+ email + " " + password);
+
+
+    public void login(String email, String password, String token, Context context){
+        Log.d(TAG, "login called with "+ email + " " + password + token);
         //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         //String token = sharedPreferences.getString("token_key", "none");
         ///Log.d(TAG, "token: "+ token);
         Map<String, String> headerParams = new HashMap<String, String>();
         headerParams.put("email", email);
         headerParams.put("password", password);
+        headerParams.put("token", token);
         //headerParams.put("token", token);
-        doStringRequest("login", "/auth/login", headerParams, Request.Method.GET);
+        doStringRequest("login", "/auth/login", headerParams, Request.Method.GET, context);
     }
 
-    public void doStringRequest(String function, String urlExtension, Map<String, String> headerParams, int methode){
+    public void doStringRequest(String function, String urlExtension, Map<String, String> headerParams, int methode, Context context){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
         Log.d(TAG, "method doStringRequestCalled");
         String custURL = url + urlExtension;
         StringRequest stringRequest = new StringRequest(methode, custURL,
@@ -66,7 +65,7 @@ public class VolleyRequest {
             }
 
         };
-        queue.add(stringRequest);
+        requestQueue.add(stringRequest);
     }
 
 

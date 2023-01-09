@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,18 +29,22 @@ import com.saylonn.chatapp.ui.dialogs.ErrorDialog;
 import com.saylonn.chatapp.ui.dialogs.LoginDialog;
 
 public class MainActivity extends AppCompatActivity {
+    private final String TAG = "MainActivity";
     private boolean loggedIn = false;
     private ActivityMainBinding binding;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
 
         SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
         String username = sp.getString("login_username", "empty");
         String password = sp.getString("login_pw", "empty");
         String fcm_token = sp.getString("fcm_token", "empty");
+
 
         if (username.equals("empty") || password.equals("empty") || fcm_token.equals("empty")){
             showLoginDialog();
@@ -61,22 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void showLoginDialog(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-
         LoginDialog loginDialog = new LoginDialog();
-
-        EditText loginField = findViewById(R.id.loginDialogEmail);
-        EditText passwordField = findViewById(R.id.loginDialogPassword);
-        Button loginButton = findViewById(R.id.loginButton);
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loginField.setText("hello");
-            }
-        });
-
-                loginDialog.show(ft, "login");
+        loginDialog.show(ft, "login");
     }
     private void showNotificationNotAllowedDialog(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
