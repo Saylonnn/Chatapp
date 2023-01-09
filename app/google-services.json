@@ -1,62 +1,33 @@
 {
   "project_info": {
-    "project_number": "536378465069",
-    "project_id": "api-messenger-fd444",
-    "storage_bucket": "api-messenger-fd444.appspot.com"
+    "project_number": "614379256396",
+    "project_id": "chatapp-9b922",
+    "storage_bucket": "chatapp-9b922.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:536378465069:android:84838fda77d36e4ec7d1a4",
+        "mobilesdk_app_id": "1:614379256396:android:398969d6874c46d560d2e9",
         "android_client_info": {
           "package_name": "com.saylonn.chatapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "536378465069-vpa6iq1tsf1tdlj2qni4of716bnmq3rc.apps.googleusercontent.com",
+          "client_id": "614379256396-4ip1ds7qf2dqd6pgvv7gc1k92vuhep85.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCoRsaPhxsDm17BMJBXGeNMEVPbV71Im_k"
+          "current_key": "AIzaSyCVm9mbnGI9aHGhg05vQBHhdYrsZTNYKSA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "536378465069-vpa6iq1tsf1tdlj2qni4of716bnmq3rc.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:536378465069:android:a7a679a184e3cdf5c7d1a4",
-        "android_client_info": {
-          "package_name": "com.saylonn.messenger"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "536378465069-vpa6iq1tsf1tdlj2qni4of716bnmq3rc.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCoRsaPhxsDm17BMJBXGeNMEVPbV71Im_k"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "536378465069-vpa6iq1tsf1tdlj2qni4of716bnmq3rc.apps.googleusercontent.com",
+              "client_id": "614379256396-4ip1ds7qf2dqd6pgvv7gc1k92vuhep85.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
