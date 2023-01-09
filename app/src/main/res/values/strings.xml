@@ -16,5 +16,7 @@
     <string name="password_hint">Password</string>
     <string name="token_key">fcm_token</string>
     <string name="serverErrorMessage">Server Error</string>
+    <string name="ok">Ok</string>
+    <string name="notification_not_allowed_error_text">Notifcations sind nicht aktiviert. Benachrichtigungen können nicht angezeigt werden.</string>
 
 </resources>

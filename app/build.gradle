@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.saylonn.chatapp'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.saylonn.chatapp"
         minSdk 26
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
