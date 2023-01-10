@@ -20,6 +20,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
+
         <EditText
             android:id="@+id/loginDialogEmail"
             android:layout_width="200dp"
@@ -56,5 +63,6 @@
             android:layout_height="wrap_content"
             android:foregroundGravity="center_vertical"
             android:text="@string/login_btn" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
