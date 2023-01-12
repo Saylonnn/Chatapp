@@ -2,12 +2,10 @@ package com.saylonn.chatapp;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +16,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -33,7 +30,7 @@ import com.saylonn.chatapp.ui.dialogs.ErrorDialog;
 import com.saylonn.chatapp.ui.dialogs.LoginDialog;
 
 public class MainActivity extends AppCompatActivity {
-    private final String TAG = "CAPP";
+    private final String TAG = "MainActivity";
     private boolean loggedIn = false;
     private ActivityMainBinding binding;
     Context context;
@@ -42,18 +39,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
 
-        if(!loggedIn){
-            String username = sp.getString("login_username", "empty");
-            String password = sp.getString("login_pw", "empty");
-            String fcm_token = sp.getString("fcm_token", "empty");
-            if (username.equals("empty") || password.equals("empty") || fcm_token.equals("empty")){
-                switchActivities();
-            }
+        SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
+        String username = sp.getString("login_username", "empty");
+        String password = sp.getString("login_pw", "empty");
+        String fcm_token = sp.getString("fcm_token", "empty");
+
+
+        if (username.equals("empty") || password.equals("empty") || fcm_token.equals("empty")){
+            showLoginDialog();
         }
 
-        loggedIn = true;
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -68,7 +65,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
+    private void showLoginDialog(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
+
+        LoginDialog loginDialog = new LoginDialog(MainActivity.this);
+        loginDialog.setCancelable(false);
+        loginDialog.show();
+    }
     private void showNotificationNotAllowedDialog(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ErrorDialog errorDialog = new ErrorDialog();
@@ -99,15 +103,6 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
             }
         }
-    }
-
-    private void switchActivities(){
-        Intent switchActivityIntent = new Intent(this, LoginActivity.class);
-        startActivity(switchActivityIntent);
-    }
-
-    public void setLoggedIn(){
-        loggedIn = true;
     }
 
 }
