@@ -23,7 +23,13 @@ import com.saylonn.chatapp.R;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "Debug_FCM";
     private static final String TAG1 = "VolleyRequest";
+    Context context;
 
+    @Override
+    public void onCreate(){
+        super.onCreate();
+        context = this;
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -73,8 +79,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed Token: " + token);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPreferences.edit().putString(getString(R.string.token_key), token).apply();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPreferences.edit().putString(String.valueOf(R.string.token_key), token).apply();
     }
 
 }

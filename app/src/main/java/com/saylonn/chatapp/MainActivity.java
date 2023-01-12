@@ -2,6 +2,7 @@ package com.saylonn.chatapp;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -16,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -40,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
+
+        if (!userLoggedIn) {
+            Intent intent = new Intent(LoginActivity.class);
+            startActivity(intent);
+        }
 
         SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
         String username = sp.getString("login_username", "empty");
@@ -72,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
         LoginDialog loginDialog = new LoginDialog(MainActivity.this);
         loginDialog.setCancelable(false);
         loginDialog.show();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.login_dialog);
+        builder.setPositiveButton("Login", (dialog, which) -> {
+            findViewById(R.id.email_tv)
+        })
     }
     private void showNotificationNotAllowedDialog(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
