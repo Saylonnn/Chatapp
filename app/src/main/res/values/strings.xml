@@ -20,7 +20,5 @@
     <string name="notification_not_allowed_error_text">Notifcations sind nicht aktiviert. Benachrichtigungen können nicht angezeigt werden.</string>
     <string name="login_status">login_status</string>
     <string name="empty_field_message">Fülle alle Felder aus</string>
-    <string name="notAccepted">Anmeldedaten nicht akzeptiert</string>
-    <string name="connectToInternet">Bitte verbinden sie sich mit dem Internet</string>
 
 </resources>

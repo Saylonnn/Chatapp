@@ -21,21 +21,17 @@ import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 
 import com.saylonn.chatapp.R;
-import com.saylonn.chatapp.comm.MyFirebaseMessagingService;
-import com.saylonn.chatapp.comm.VolleyCallbackListener;
 import com.saylonn.chatapp.comm.VolleyRequest;
 
-public class LoginDialog extends Dialog implements View.OnClickListener, VolleyCallbackListener {
+public class LoginDialog extends Dialog implements View.OnClickListener{
     private final String TAG = "VolleyRequest";
-    private boolean isLoggedIn = false;
     private ProgressBar progressBar;
     public Activity c;
-    private VolleyRequest volleyRequest = new VolleyRequest();
-    private EditText loginField;
-    private EditText passwordField;
-    private Button loginButton;
-    private SharedPreferences sharedPreferences;
-
+    VolleyRequest volleyRequest = new VolleyRequest();
+    EditText loginField;
+    EditText passwordField;
+    Button loginButton;
+    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
 
     public LoginDialog(Activity a) {
         super(a);
@@ -43,58 +39,49 @@ public class LoginDialog extends Dialog implements View.OnClickListener, VolleyC
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         super.onCreate(savedInstanceState);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login_dialog);
-        progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
         loginField = findViewById(R.id.loginDialogEmail);
         passwordField = findViewById(R.id.loginDialogPassword);
         loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(this);
-        volleyRequest.addCallbackListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        Log.d(TAG, "onclick performed");
         if(!loginField.getText().toString().equals("") && !passwordField.getText().toString().equals("")){
-            String token = sharedPreferences.getString(String.valueOf(R.string.token_key), "none");
-            if(!token.equals("none")) {
-                volleyRequest.login(loginField.getText().toString(), passwordField.getText().toString(), "test_token", getContext());
-                progressBar.setVisibility(View.VISIBLE);
-            }else{
-                Toast.makeText(this.getContext(), "Connect to internet", Toast.LENGTH_SHORT).show();
-            }
+            volleyRequest.login(loginField.getText().toString(), passwordField.getText().toString(), "test_token", getContext());
+            progressBar.setVisibility(View.VISIBLE);
+            while(sp.getString(String.valueOf(R.string.login_status), "not_tried").equals("not_tried")){
 
-        }else{
-            Toast.makeText(this.getContext(), String.valueOf(R.string.empty_field_message), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void callbackMethod(String function, String parameter){
-        if (function.equals("login")){
-            if (parameter.equals("accepted")){
-
-                this.isLoggedIn = true;
-                this.dismiss();
-            }
-        }
-        else{
-            Log.d(TAG, "login not accepted");
-            if(parameter.equals("declined")) {
-                Toast.makeText(this.getContext(), String.valueOf(R.string.notAccepted), Toast.LENGTH_SHORT).show();
-            }
-            if(parameter.equals("serverError")) {
-                Toast.makeText(this.getContext(), String.valueOf(R.string.notAccepted), Toast.LENGTH_SHORT).show();
+                try{
+                    Thread.sleep(100);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                Log.d(TAG, sp.getString(String.valueOf(R.string.login_status), "not_set"));
             }
             progressBar.setVisibility(View.GONE);
-            loginField.setText("");
-            passwordField.setText("");
+            dismiss();
 
+
+            /*
+            progressBar = (ProgressBar)findViewById(R.id.progressBar);
+
+            progressBar.setVisibility(View.VISIBLE);
+            while(sp.getString(String.valueOf(R.string.login_status), "not_tried").equals("not_tried")){
+                try{
+                    Thread.sleep(10);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+            */
+        }else{
+            Toast.makeText(this.getContext(), String.valueOf(R.string.empty_field_message), Toast.LENGTH_SHORT).show();
         }
     }
 }
