@@ -78,7 +78,7 @@ public class LoginDialog extends Dialog implements View.OnClickListener, VolleyC
     public void callbackMethod(String function, String parameter){
         if (function.equals("login")){
             if (parameter.equals("accepted")){
-                Log.d(TAG, "login accepted");
+
                 this.isLoggedIn = true;
                 this.dismiss();
             }

@@ -21,8 +21,7 @@ import com.saylonn.chatapp.R;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    private static final String TAG = "Debug_FCM";
-    private static final String TAG1 = "VolleyRequest";
+    private static final String TAG = "CAPP";
     Context context;
 
     @Override
@@ -36,7 +35,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Data Massages are always handled here
         //notification messages are handled here if the app is in the foreground
         //so handle all notifications here
-        Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+        Log.d(TAG + " MyFirebaseMessagingService", "Message data payload: " + remoteMessage.getData());
         if (remoteMessage.getData().size() > 0) {
             //check if data needs to bee processed by long running job if yes use worker Thread (siehe quickstart android fcm beispiele)
             if (true) {
@@ -49,7 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notificationo Body: " + remoteMessage.getNotification().getBody());
+            Log.d(TAG + " MyFirebaseMessagingService", "Message Notificationo Body: " + remoteMessage.getNotification().getBody());
             String notificationBody = remoteMessage.getNotification().getBody();
             if (remoteMessage.getNotification().getBody() != null) {
                 sendNotification(notificationBody);
@@ -78,9 +77,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
-        Log.d(TAG, "Refreshed Token: " + token);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Log.d(TAG + " MyFirebaseMessagingService", "Refreshed Token: " + token);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.edit().putString(String.valueOf(R.string.token_key), token).apply();
+        String reToken = sharedPreferences.getString(String.valueOf(R.string.token_key), "none");
+        Log.d(TAG + " MyFirebaseMessagingService", reToken);
     }
 
 }
