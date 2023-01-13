@@ -24,7 +24,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "Debug_FCM";
     private static final String TAG1 = "VolleyRequest";
 
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //Data Massages are always handled here
@@ -76,5 +75,4 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.edit().putString(getString(R.string.token_key), token).apply();
     }
-
 }
