@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.saylonn.chatapp.R;
@@ -30,7 +31,7 @@ public class VolleyRequest {
         headerParams.put("email", email);
         headerParams.put("password", password);
         headerParams.put("token", token);
-        doLoginRequest("/auth/login", headerParams, Request.Method.GET, context);
+        doStringRequest("login", "/auth/login", headerParams, Request.Method.GET, context);
     }
 
     public void doLoginRequest(String urlExtension, Map<String, String> headerParams, int methode, Context context){
@@ -80,14 +81,58 @@ public class VolleyRequest {
         headerParams.put("email", email);
         headerParams.put("password", password);
         headerParams.put("token", token);
-        doRegisterRequest( "/auth/login", headerParams, Request.Method.GET, context);
+        doStringRequest("register", "/auth/login", headerParams, Request.Method.GET, context);
     }
 
-    private void doRegisterRequest(String urlExtension, Map<String, String> headerParams, int methode, Context context){
-
+    public void doStringRequest(String function, String urlExtension, Map<String, String> headerParams, int method, Context context){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        String custURL = url + urlExtension;
+        StringRequest stringRequest = new StringRequest(method, custURL,
+                response -> {
+                    Log.d(TAG, "String Request Response: " + response);
+                    handleResponse(function, response);
+                },
+                error -> {
+                    Log.d(TAG, "String Request Response: " + error.toString());
+                    handleError(function, error);
+                });
     }
 
+    private void handleResponse(String function, String message){
+        if(function.equals("login")){
+            //read login server response
+            if (message.equals("accepted")){
+                doCallback(function, message);
+            }
+            else if(message.equals("no password or email")){
+                doCallback(function, "declined");
+            }
+            else if(message.equals("password or email incorrect")){
+                doCallback(function, "declined");
+            }
+            else{
+                doCallback(function, "declined");
+            }
+        }
+        else if(function.equals("register")){
+            //read register server response
+        }
+    }
 
+    private void handleError(String function, VolleyError error){
+        //handle all Error responses
+        Log.d(TAG, "Error Message: " + error.networkResponse.toString());
+        String resp = error.networkResponse.toString();
+        if(resp.equals("server error")){
+            doCallback(function, "server Error");
+        }
+    }
+
+    private void doCallback(String function, String message){
+        for(VolleyCallbackListener vCL : callbackApps){
+            vCL.callbackMethod(function, message);
+        }
+    }
 
     //TODO: Updated Token to server
     //      Register new account
