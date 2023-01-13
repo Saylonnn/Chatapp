@@ -33,18 +33,7 @@ public class SettingsFragment extends Fragment {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        Log.d(TAG, "before binding" );
-        TextView email_tv = binding.emailTv;
-        TextView password_tv = binding.passwordTv;
-        Button loginbtn = binding.button2;
-        Log.d(TAG, "before on click" );
-        loginbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                volleyRequest.login(email_tv.getText().toString(), password_tv.getText().toString(), "test_token", container.getContext());
-            }
-        });
-        Log.d(TAG, "after on Click" );
+
         final TextView textView = binding.textSettings;
         settingsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;

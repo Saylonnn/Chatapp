@@ -8,20 +8,13 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.renderscript.Sampler;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -30,7 +23,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.saylonn.chatapp.databinding.ActivityMainBinding;
 import com.saylonn.chatapp.ui.dialogs.ErrorDialog;
-import com.saylonn.chatapp.ui.dialogs.LoginDialog;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "CAPP";
