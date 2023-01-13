@@ -3,6 +3,7 @@ package com.saylonn.chatapp.comm;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.telecom.Call;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import java.util.Map;
 public class VolleyRequest {
     private static final String TAG = "VolleyRequest";
     String url = "https://www.api.caylonn.de:1337";
+    private List<VolleyCallbackListener> callbackApps = new ArrayList<>();
 
 
     public void login(String email, String password, String token, Context context){
@@ -52,16 +54,22 @@ public class VolleyRequest {
                 response -> {
                     Log.d(TAG, response.toString());
                     if(response.toString().equals( "accepted")){
-                        sp.edit().putString(String.valueOf(R.string.login_status), "logged_in");
+                        for(VolleyCallbackListener cI : callbackApps){
+                            cI.callbackMethod("login", "accepted");
+                        }
                         Log.d(TAG, "sp edited _ logged in");
                     }
                      else if(response.toString().equals( "password or email incorrect")){
                         Toast.makeText(context, "password or email incorrect", Toast.LENGTH_SHORT).show();
-                        sp.edit().putString(String.valueOf(R.string.login_status),"not_logged_in");
+                        for(VolleyCallbackListener cI : callbackApps){
+                            cI.callbackMethod("login", "not_accepted");
+                        }
                     }
                     else{
                         Log.d(TAG, response.toString());
-                        sp.edit().putString(String.valueOf(R.string.login_status),response.toString());
+                        for(VolleyCallbackListener cI : callbackApps){
+                            cI.callbackMethod("login", "not_accepted");
+                        }
                         Toast.makeText(context, "Login Error", Toast.LENGTH_SHORT).show();
 
                     }
@@ -80,6 +88,17 @@ public class VolleyRequest {
 
         };
         requestQueue.add(stringRequest);
+    }
+
+
+
+    //TODO: Updated Token to server
+    //      Register new account
+    //      sendMessage
+
+
+    public void addCallbackListener(VolleyCallbackListener ma){
+        callbackApps.add(ma);
     }
 
 }

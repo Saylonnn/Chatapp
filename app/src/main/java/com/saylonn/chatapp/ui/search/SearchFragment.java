@@ -24,8 +24,13 @@ public class SearchFragment extends Fragment {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSearch;
-        searchViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        //Searchleiste
+        //https://developer.android.com/develop/ui/views/search/search-dialog
+
+        //Liste an usern anzeigen mittels: RecyclerView
+
+        //final TextView textView = binding.textSearch;
+        //searchViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

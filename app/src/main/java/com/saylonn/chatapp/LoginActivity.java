@@ -60,7 +60,6 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
                         loginButton.setEnabled(false);
                     }else{
                         Toast.makeText(LoginActivity.this, "Connect to internet " + token, Toast.LENGTH_SHORT).show();
-
                     }
 
                 }else{
