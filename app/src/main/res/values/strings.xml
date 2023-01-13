@@ -22,5 +22,16 @@
     <string name="empty_field_message">Fülle alle Felder aus</string>
     <string name="notAccepted">Anmeldedaten nicht akzeptiert</string>
     <string name="connectToInternet">Bitte verbinden sie sich mit dem Internet</string>
+    <string name="login_username">login_username</string>
+    <string name="login_password">login_password</string>
+    <string name="login_email">login_email</string>
+    <string name="want_registration">noch kein Account?</string>
+    <string name="registration">Registrieren</string>
+    <string name="retype_password_hint">Password wiederholen</string>
+    <string name="username">Username</string>
+    <string name="profile_username">Username:</string>
+    <string name="profile_email">Email:</string>
+    <string name="logout_string">Logout</string>
+    <string name="username_hint">Username</string>
 
 </resources>

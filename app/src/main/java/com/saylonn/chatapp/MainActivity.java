@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -37,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 
         if(!loggedIn){
-            String username = sp.getString("login_username", "empty");
-            String password = sp.getString("login_pw", "empty");
-            String fcm_token = sp.getString("fcm_token", "empty");
-            if (username.equals("empty") || password.equals("empty") || fcm_token.equals("empty")){
+            String email = sp.getString(String.valueOf(R.string.login_email), "empty");
+            String password = sp.getString(String.valueOf(R.string.login_password), "empty");
+            String fcm_token = sp.getString(String.valueOf(R.string.token_key), "empty");
+            Log.d(TAG, "Saved Credentials: email: " + email + " password: " + password);
+            if (email.equals("empty") || password.equals("empty") || fcm_token.equals("empty")){
                 switchActivities();
             }
         }
