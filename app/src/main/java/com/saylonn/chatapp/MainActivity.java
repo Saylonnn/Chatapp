@@ -10,10 +10,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,6 +25,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.saylonn.chatapp.databinding.ActivityMainBinding;
 import com.saylonn.chatapp.ui.dialogs.ErrorDialog;
 
@@ -35,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
+        Log.d(TAG, "MainActivity created");
+        Intent switchToLoadingScreenIntent = new Intent(context, LodingScreenActivity.class);
+        startActivity(switchToLoadingScreenIntent);
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 
         if(!loggedIn){

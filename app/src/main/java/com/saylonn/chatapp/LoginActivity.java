@@ -48,25 +48,23 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
         String token = sharedPreferences.getString(String.valueOf(R.string.token_key), "none");
         Log.d(TAG + " LoginActivity", "token = " + token);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = email_tv.getText().toString();
-                String password = password_tv.getText().toString();
-                if(!email.equals("") && !password.equals("")){
-                    if(!token.equals("none")) {
-                        volleyRequest.login(email, password, token, LoginActivity.this);
-                        progressBar.setVisibility(View.VISIBLE);
-                        loginButton.setEnabled(false);
-                    }else{
-                        Toast.makeText(LoginActivity.this, "Connect to internet " + token, Toast.LENGTH_SHORT).show();
-                    }
-
+        loginButton.setOnClickListener(v -> {
+            String email = email_tv.getText().toString();
+            String password = password_tv.getText().toString();
+            if(!email.equals("") && !password.equals("")){
+                if(!token.equals("none")) {
+                    volleyRequest.login(email, password, token, LoginActivity.this);
+                    progressBar.setVisibility(View.VISIBLE);
+                    loginButton.setEnabled(false);
                 }else{
-                    Toast.makeText(LoginActivity.this, "Bitte fülle alle Felder aus.", Toast.LENGTH_SHORT).show();
+                    String text = "Connect to internet " + token;
+                    Toast.makeText(LoginActivity.this, text, Toast.LENGTH_SHORT).show();
                 }
+
+            }else{
+                Toast.makeText(LoginActivity.this, "Bitte fülle alle Felder aus.", Toast.LENGTH_SHORT).show();
             }
-    });
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +78,8 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
     @Override
     public void callbackMethod(String function, String message) {
         if(function.equals("login") && message.equals("accepted")){
-            Log.d(TAG + " LoginActivity", "login accepted");
+            String text = " LoginActivity" + "login accepted";
+            Log.d(TAG, text);
             email_tv = findViewById(R.id.loginEmail);
             password_tv = findViewById(R.id.loginPassword);
             String email = email_tv.getText().toString();

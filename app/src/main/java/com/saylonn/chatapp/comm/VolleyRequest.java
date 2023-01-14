@@ -6,11 +6,13 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.saylonn.chatapp.LoginActivity;
 import com.saylonn.chatapp.R;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class VolleyRequest {
-    private static final String TAG = "VolleyRequest";
+    private static final String TAG = "CAPP";
     String url = "https://www.api.caylonn.de:1337";
     final private List<VolleyCallbackListener> callbackApps = new ArrayList<>();
 
@@ -34,54 +36,16 @@ public class VolleyRequest {
         doStringRequest("login", "/auth/login", headerParams, Request.Method.GET, context);
     }
 
-    public void doLoginRequest(String urlExtension, Map<String, String> headerParams, int methode, Context context){
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        Log.d(TAG, "method LoginRequestCalled");
-        String custURL = url + urlExtension;
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        StringRequest stringRequest = new StringRequest(methode, custURL,
-                response -> {
-                    Log.d(TAG, response);
-                    if(response.equals( "accepted")){
-                        for(VolleyCallbackListener cI : callbackApps){
-                            cI.callbackMethod("login", "accepted");
-                        }
-                        Log.d(TAG, "sp edited _ logged in");
-                    }
-                     else if(response.equals( "password or email incorrect")){
-                        Toast.makeText(context, "password or email incorrect", Toast.LENGTH_SHORT).show();
-                        for(VolleyCallbackListener cI : callbackApps){
-                            cI.callbackMethod("login", "not_accepted");
-                        }
-                    }
-                    else{
-                        Log.d(TAG, response);
-                        for(VolleyCallbackListener cI : callbackApps){
-                            cI.callbackMethod("login", "not_accepted");
-                        }
-                        Toast.makeText(context, "Login Error", Toast.LENGTH_SHORT).show();
-                    }
-                }, error -> {
-                    String message = context.getString(R.string.serverErrorMessage);
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-                    sp.edit().putString(String.valueOf(R.string.login_status), "not_logged_in").apply();
-
-                    Log.d(TAG, "sp edited _ not logged in");
-                    Log.d(TAG, error.getMessage());
-                }){
-        };
-        requestQueue.add(stringRequest);
-    }
-
-    public void register(String email, String password, String token, Context context){
+    public void register(String username, String email, String password, String token, Context context){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         sp.edit().putString(String.valueOf(R.string.login_status), "not_tried").apply();
         Log.d(TAG, "login called with "+ email + " " + password + " " + token);
         Map<String, String> headerParams = new HashMap<>();
+        headerParams.put("username", username);
         headerParams.put("email", email);
         headerParams.put("password", password);
         headerParams.put("token", token);
-        doStringRequest("register", "/auth/login", headerParams, Request.Method.GET, context);
+        doStringRequest("register", "/auth/register", headerParams, Request.Method.GET, context);
     }
 
     public void doStringRequest(String function, String urlExtension, Map<String, String> headerParams, int method, Context context){
@@ -90,36 +54,73 @@ public class VolleyRequest {
         StringRequest stringRequest = new StringRequest(method, custURL,
                 response -> {
                     Log.d(TAG, "String Request Response: " + response);
-                    handleResponse(function, response);
-                },
-                error -> {
+                    handleResponse(function, response, context);
+                },error -> {
                     Log.d(TAG, "String Request Response: " + error.toString());
-                    handleError(function, error);
-                });
+                    handleError(function, error, context);
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headerParams;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
-    private void handleResponse(String function, String message){
+    private void handleResponse(String function, String message, Context context){
         if(function.equals("login")){
             //read login server response
             if (message.equals("accepted")){
+                String text = String.valueOf(R.string.login_status_logged_in);
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 doCallback(function, message);
             }
             else if(message.equals("no password or email")){
+                String text = String.valueOf(R.string.login_error_empty_field);
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 doCallback(function, "declined");
             }
             else if(message.equals("password or email incorrect")){
+                String text = String.valueOf(R.string.login_status_declined);
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 doCallback(function, "declined");
             }
             else{
+                String text = String.valueOf(R.string.login_status_declined);
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 doCallback(function, "declined");
             }
         }
         else if(function.equals("register")){
-            //read register server response
+            if(message.equals("accepted")){
+                String text = String.valueOf(String.valueOf(R.string.account_created));
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                doCallback(function, message);
+            }
+            else if(message.equals("invalid entry")){
+                String text = String.valueOf(String.valueOf(R.string.faulty_input));
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                doCallback(function, "declined");
+            }
+            else if(message.equals("invalid pw length")){
+                String text = String.valueOf(String.valueOf(R.string.correct_password_length));
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                doCallback(function, "declined");
+            }
+            else if(message.equals("email not excepted")){
+                String text = String.valueOf(String.valueOf(R.string.email_already_in_use));
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                doCallback(function, "declined");
+            }
+            else{
+                String text = String.valueOf(R.string.login_status_declined);
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                doCallback(function, "declined");
+            }
         }
     }
 
-    private void handleError(String function, VolleyError error){
+    private void handleError(String function, VolleyError error, Context context){
         //handle all Error responses
         Log.d(TAG, "Error Message: " + error.networkResponse.toString());
         String resp = error.networkResponse.toString();
