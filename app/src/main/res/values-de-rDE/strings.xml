@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_not_allowed_error_text">Notifcations sind nicht aktiviert. Benachrichtigungen können nicht angezeigt werden.</string>
+    <string name="empty_field_message">Fülle alle Felder aus</string>
+    <string name="connectToInternet">Bitte verbinden sie sich mit dem Internet</string>
+    <string name="want_registration">noch kein Account?</string>
+    <string name="retype_password_hint">Password wiederholen</string>
+    <string name="login_status_logged_in">Eingeloggt</string>
+    <string name="login_error_empty_field">Bitte füllen sie alle Felder aus</string>
+    <string name="login_status_declined">Falscher Email oder Passwort</string>
+    <string name="passwords_must_be_equals">Passwörter müssen gleich sein.</string>
+    <string name="field_not_empty_allowed">Feld darf nicht leer sein</string>
+    <string name="correct_password_length">"Passwort muss min. 8 Zeichen und max. 20 Zeichen sein "</string>
+    <string name="account_created">Account erstellt.</string>
+    <string name="faulty_input">Fehlerhafte Eingabe</string>
+    <string name="email_already_in_use">Emailadresse nicht verfügbar</string>
+</resources>
