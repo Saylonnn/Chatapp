@@ -53,33 +53,33 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-        private void doCreate() {
-            context = getApplicationContext();
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            if (!loggedIn) {
-                String email = sp.getString(String.valueOf(R.string.login_email), "empty");
-                String password = sp.getString(String.valueOf(R.string.login_password), "empty");
-                String fcm_token = sp.getString(String.valueOf(R.string.token_key), "empty");
-                Log.d(TAG, "Saved Credentials: email: " + email + " password: " + password);
-                if (email.equals("empty") || password.equals("empty") || fcm_token.equals("empty")) {
-                    switchActivities();
-                }
+    private void doCreate() {
+        context = getApplicationContext();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!loggedIn) {
+            String email = sp.getString(String.valueOf(R.string.login_email), "empty");
+            String password = sp.getString(String.valueOf(R.string.login_password), "empty");
+            String fcm_token = sp.getString(String.valueOf(R.string.token_key), "empty");
+            Log.d(TAG, "Saved Credentials: email: " + email + " password: " + password);
+            if (email.equals("empty") || password.equals("empty") || fcm_token.equals("empty")) {
+                switchActivities();
             }
-
-            loggedIn = true;
-            binding = ActivityMainBinding.inflate(getLayoutInflater());
-            setContentView(binding.getRoot());
-
-            BottomNavigationView navView = findViewById(R.id.nav_view);
-            // Passing each menu ID as a set of Ids because each
-            // menu should be considered as top level destinations.
-            AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.navigation_chats, R.id.navigation_search, R.id.navigation_profile, R.id.navigation_settings)
-                    .build();
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-            NavigationUI.setupWithNavController(binding.navView, navController);
         }
+
+        loggedIn = true;
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_chats, R.id.navigation_search, R.id.navigation_profile, R.id.navigation_settings)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(binding.navView, navController);
+    }
 
 
 

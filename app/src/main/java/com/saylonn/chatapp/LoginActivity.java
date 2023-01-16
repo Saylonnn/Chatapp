@@ -17,6 +17,7 @@ import com.saylonn.chatapp.comm.VolleyCallbackListener;
 import com.saylonn.chatapp.comm.VolleyRequest;
 import com.saylonn.chatapp.interfaces.CallbackInterface;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity implements VolleyCallbackListener {
@@ -65,7 +66,6 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
                 Toast.makeText(LoginActivity.this, "Bitte fülle alle Felder aus.", Toast.LENGTH_SHORT).show();
             }
         });
-
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,8 +95,20 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
         }
     }
 
+    @Override
+    public void jsonCallbackMethod(String function, JSONObject json){
+        if(function.equals("login")) {
+            Log.d(TAG, "LoginActivity: jsonCallbackMethod called");
+        }
+    }
+
     private void switchToRegisterActivity(){
         Intent switchActivityIntent = new Intent(this, RegisterActivity.class);
         startActivity(switchActivityIntent);
+    }
+
+    @Override
+    public void onBackPressed(){
+        moveTaskToBack(true);
     }
 }
