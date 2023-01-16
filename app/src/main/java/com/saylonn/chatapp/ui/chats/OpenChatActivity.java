@@ -55,16 +55,20 @@ public class OpenChatActivity extends AppCompatActivity {
         customAdapter = new CustomAdapter(OpenChatActivity.this, message_id, sender, message);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(OpenChatActivity.this));
+        recyclerView.smoothScrollToPosition(message.size()-1);
 
     }
 
     void sendMessage() {
         chatDatabase.addLocalMessage("localUser", messageField.getText().toString().trim());
+        message.add(messageField.getText().toString().trim());
+        customAdapter.notifyDataSetChanged();
         messageField.setText("");
+        recyclerView.smoothScrollToPosition(message.size()-1);
     }
 
     void storeDataInArrays() {
-        Cursor cursor = chatDatabase.readAllData();
+        Cursor cursor = chatDatabase.readMyData();
 
         if(cursor.getCount() == 0){
             Toast.makeText(this, "There is no Data.", Toast.LENGTH_SHORT).show();
