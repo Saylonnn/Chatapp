@@ -7,14 +7,14 @@
 
     <fragment
         android:id="@+id/navigation_chats"
-        android:name="com.saylonn.chatapp.ui.search.SearchFragment"
+        android:name="com.saylonn.chatapp.ui.chats.ChatsFragment"
         android:label="@string/title_chats"
         tools:layout="@layout/fragment_chats" >
     </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.saylonn.chatapp.ui.chats.ChatsFragment"
+        android:name="com.saylonn.chatapp.ui.search.SearchFragment"
         android:label="@string/title_search"
         tools:layout="@layout/fragment_search" >
     </fragment>

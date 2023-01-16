@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.saylonn.chatapp.comm.VolleyCallbackListener;
 import com.saylonn.chatapp.comm.VolleyRequest;
 
+import org.json.JSONObject;
+
 public class RegisterActivity extends AppCompatActivity implements VolleyCallbackListener {
     private final String TAG = "CAPP";
     private EditText username_tv;
@@ -69,27 +71,27 @@ public class RegisterActivity extends AppCompatActivity implements VolleyCallbac
                             register_button.setEnabled(false);
                         }
                         else{
-                            password_1_tv.setError(String.valueOf(R.string.correct_password_length));
+                            password_1_tv.setError(this.getString(R.string.correct_password_length));
                         }
                     }
                     else{
                         password_2_tv.setText("");
-                        String errorText = String.valueOf(R.string.passwords_must_be_equals);
+                        String errorText = this.getString(R.string.passwords_must_be_equals);
                         password_2_tv.setError(errorText);
                     }
                 }else{
                     if(username.equals("")) {
-                        String errorText = String.valueOf(R.string.field_not_empty_allowed);
+                        String errorText = this.getString(R.string.field_not_empty_allowed);
                         username_tv.setError(errorText);
                     }
                     if(email.equals("")) {
-                        email_tv.setError(String.valueOf(R.string.field_not_empty_allowed));
+                        email_tv.setError(this.getString(R.string.field_not_empty_allowed));
                     }
                     if(password_1.equals("")) {
-                        password_1_tv.setError(String.valueOf(R.string.field_not_empty_allowed));
+                        password_1_tv.setError(this.getString(R.string.field_not_empty_allowed));
                     }
                     if(password_2.equals("")) {
-                        password_2_tv.setError(String.valueOf(R.string.field_not_empty_allowed));
+                        password_2_tv.setError(this.getString(R.string.field_not_empty_allowed));
                     }
                 }
             }
@@ -105,6 +107,13 @@ public class RegisterActivity extends AppCompatActivity implements VolleyCallbac
         }else{
             progressBar.setVisibility(View.GONE);
             register_button.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void jsonCallbackMethod(String function, JSONObject json){
+        if(function.equals("register")) {
+            Log.d(TAG, "RegisterActivity: jsonCallbackMethod called");
         }
     }
 }
