@@ -25,7 +25,7 @@
     <string name="login_password" translatable="false">login_password</string>
     <string name="login_email" translatable="false">login_email</string>
     <string name="want_registration">no account yet?</string>
-    <string name="registration" translatable="false">Registrieren</string>
+    <string name="registration">Register</string>
     <string name="retype_password_hint">repeat password</string>
     <string name="username" translatable="false">Username</string>
     <string name="profile_username" translatable="false">Username:</string>
