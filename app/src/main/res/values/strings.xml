@@ -4,7 +4,6 @@
     <string name="title_search" translatable="false">Search</string>
     <string name="title_profile" translatable="false">Profile</string>
     <string name="title_settings" translatable="false">Settings</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="dialog_login_message" translatable="false">Please log in</string>
     <string name="login_btn" translatable="false">Log In</string>
@@ -41,5 +40,8 @@
     <string name="account_created">Create Account.</string>
     <string name="faulty_input">incorrect input</string>
     <string name="email_already_in_use">Email not available</string>
+    <string name="default_notification_channel_id" translatable="false">default_notification_channel</string>
+    <string name="notification_id" translatable="false">notification_id</string>
+
 
 </resources>

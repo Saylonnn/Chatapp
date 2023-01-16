@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.saylonn.chatapp.ChatsModel;
 import com.saylonn.chatapp.R;
 import com.saylonn.chatapp.interfaces.VolleyCallbackListener;
 import com.saylonn.chatapp.comm.VolleyRequest;
