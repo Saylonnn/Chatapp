@@ -10,11 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.saylonn.chatapp.ChatsModel;
 import com.saylonn.chatapp.databinding.FragmentChatsBinding;
 
-public class ChatsFragment extends Fragment {
+import java.util.ArrayList;
 
+public class ChatsFragment extends Fragment {
     private FragmentChatsBinding binding;
+
+    ArrayList<ChatsModel> chatsModels = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -33,5 +37,9 @@ public class ChatsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void setUpChatsModels(){
+
     }
 }
