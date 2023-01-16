@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,18 +13,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.saylonn.chatapp.R;
 import com.saylonn.chatapp.comm.VolleyCallbackListener;
 import com.saylonn.chatapp.comm.VolleyRequest;
 import com.saylonn.chatapp.databinding.FragmentSearchBinding;
-import com.saylonn.chatapp.ui.SearchRecyclerViewComponents.Contact;
-import com.saylonn.chatapp.ui.SearchRecyclerViewComponents.CustomSearchAdapter;
+import com.saylonn.chatapp.ui.search.SearchRecyclerViewComponents.Contact;
+import com.saylonn.chatapp.ui.search.SearchRecyclerViewComponents.CustomSearchAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class SearchFragment extends Fragment implements VolleyCallbackListener {

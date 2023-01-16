@@ -1,4 +1,4 @@
-package com.saylonn.chatapp.ui.SearchRecyclerViewComponents;
+package com.saylonn.chatapp.ui.search.SearchRecyclerViewComponents;
 
 public class Contact {
     private String username;

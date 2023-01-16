@@ -1,4 +1,4 @@
-package com.saylonn.chatapp.ui.SearchRecyclerViewComponents;
+package com.saylonn.chatapp.ui.search.SearchRecyclerViewComponents;
 
 import android.view.View;
 import android.widget.Button;
