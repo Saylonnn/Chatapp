@@ -80,9 +80,4 @@ public class OpenChatActivity extends AppCompatActivity {
             }
         }
     }
-
-
-    public ArrayList<String> getSender() {
-        return sender;
-    }
 }

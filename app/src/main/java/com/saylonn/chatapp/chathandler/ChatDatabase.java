@@ -57,19 +57,7 @@ public class ChatDatabase extends SQLiteOpenHelper {
     }
 
     public Cursor readMyData() {
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_SENDER + " LIKE 'localUser'";
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-
-        Cursor cursor = null;
-
-        if(sqLiteDatabase != null) {
-            cursor = sqLiteDatabase.rawQuery(query, null);
-        }
-        return cursor;
-    }
-
-    public Cursor readReceivedData() {
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_SENDER + " NOT LIKE 'localUser'";
+        String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
         Cursor cursor = null;
