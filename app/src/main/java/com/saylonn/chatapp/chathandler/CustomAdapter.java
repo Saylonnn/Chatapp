@@ -35,8 +35,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.message_txt.setText(String.valueOf(message.get(position)));
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
+        myViewHolder.message_txt.setText(String.valueOf(message.get(position)));
     }
 
     @Override
@@ -46,7 +46,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView message_txt, received_message_txt;
+        TextView message_txt;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,4 +54,5 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             message_txt = itemView.findViewById(R.id.message_txt);
         }
     }
+
 }
