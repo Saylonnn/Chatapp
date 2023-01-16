@@ -1,4 +1,4 @@
-package com.saylonn.chatapp;
+package com.saylonn.chatapp.ui.chats;
 
 public class ChatsModel {
     String friendName;

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.saylonn.chatapp.ChatsModel;
 import com.saylonn.chatapp.databinding.FragmentChatsBinding;
 
 import java.util.ArrayList;
