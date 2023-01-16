@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class VolleyRequest {
     private static final String TAG = "CAPP";
@@ -162,6 +163,9 @@ public class VolleyRequest {
                 doCallback(function, "declined");
             }
         }
+        else if(function.equals("sendMessage")){
+            Log.d(TAG, "[VolleyRequest]{handleResponse}: " + message);
+        }
     }
     private void handleJSONResponse(String function, JSONObject json, Context context){
         Log.d(TAG, "Handle JSON Response");
@@ -183,6 +187,11 @@ public class VolleyRequest {
         if(resp.equals("server error")){
             doCallback(function, "server Error");
         }
+        if(error.getMessage() != null){
+            if(error.getMessage().equals("cannot find target adress"));
+            Toast.makeText(context, String.valueOf(R.string.target_adress_not_available), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void doCallback(String function, String message){

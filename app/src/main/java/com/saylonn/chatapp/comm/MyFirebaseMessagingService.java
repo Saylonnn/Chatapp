@@ -7,15 +7,14 @@ import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -23,26 +22,21 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.saylonn.chatapp.MainActivity;
 import com.saylonn.chatapp.R;
-import com.saylonn.chatapp.ui.chats.ChatsFragment;
 
-import org.json.JSONObject;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "CAPP";
-    private static final String TAG1 = "VolleyRequest";
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        String fromUser;
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        String fromUser = "";
         String messageText;
         String fromEmail;
         String title;
-
 
         super.onMessageReceived(remoteMessage);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -54,7 +48,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             fromUser = jsonData.get("fromUser");
             messageText = jsonData.get("messageText");
             fromEmail = jsonData.get("fromEmail");
-
 
 
             //karol hier musst du das zeug zu deiner activity weiterleiten und dann dort anzeigen
@@ -74,7 +67,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     notificationID = 0;
                 }
                 sharedPreferences.edit().putInt(String.valueOf(R.string.notification_id), notificationID).apply();
-
                 Log.d(TAG, "Message Notificationo Body: " + remoteMessage.getNotification().getBody());
 
                 String notificationBody = remoteMessage.getNotification().getBody();
@@ -82,14 +74,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     title = Objects.requireNonNull(remoteMessage.getNotification()).getTitle();
 
                     Log.d(TAG, "send Notification");
-
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
                     String channelId = "fcm_default_channel";
                     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
+                    if(title.equals("New message from")){
+                        title = title + " " + fromUser;
+                    }else{
+                        title = remoteMessage.getNotification().getTitle();
+                    }
                     NotificationCompat.Builder notificationBuilder =
                             new NotificationCompat.Builder(this, channelId)
                                     .setSmallIcon(R.drawable.main_launcher_icon_foreground)

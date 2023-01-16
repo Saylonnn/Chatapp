@@ -15,4 +15,5 @@
     <string name="faulty_input">Fehlerhafte Eingabe</string>
     <string name="email_already_in_use">Emailadresse nicht verfügbar</string>
     <string name="registration">Registrieren</string>
+    <string name="target_adress_not_available">Emailadresse nicht verfügbar.</string>
 </resources>

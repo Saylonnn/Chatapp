@@ -42,6 +42,7 @@
     <string name="email_already_in_use">Email not available</string>
     <string name="default_notification_channel_id" translatable="false">default_notification_channel</string>
     <string name="notification_id" translatable="false">notification_id</string>
+    <string name="target_adress_not_available">Emailadress not available</string>
 
 
 </resources>
