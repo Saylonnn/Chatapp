@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.saylonn.chatapp.comm.VolleyCallbackListener;
+import com.saylonn.chatapp.interfaces.VolleyCallbackListener;
 import com.saylonn.chatapp.comm.VolleyRequest;
 import com.saylonn.chatapp.databinding.FragmentSearchBinding;
 import com.saylonn.chatapp.ui.search.SearchRecyclerViewComponents.Contact;
@@ -56,7 +56,7 @@ public class SearchFragment extends Fragment implements VolleyCallbackListener {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                volleyRequest.list_users(query, getActivity());
+                volleyRequest.listUsers(query, getActivity());
                 return false;
             }
 

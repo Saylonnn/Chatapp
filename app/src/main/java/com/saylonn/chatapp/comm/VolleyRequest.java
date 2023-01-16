@@ -9,13 +9,12 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.saylonn.chatapp.LoginActivity;
 import com.saylonn.chatapp.R;
+import com.saylonn.chatapp.interfaces.VolleyCallbackListener;
 
 import org.json.JSONObject;
 
@@ -52,11 +51,22 @@ public class VolleyRequest {
         doStringRequest("register", "/auth/register", headerParams, Request.Method.GET, context);
     }
 
-    public void list_users(String searchString, Context context){
+    public void listUsers(String searchString, Context context){
         Log.d(TAG, "list_users called with search String : " + searchString);
         Map<String, String> headerParams = new HashMap<>();
         headerParams.put("search_string", searchString);
         doJsonRequest("list_users", "/contacts/list_users", headerParams, Request.Method.GET, context);
+    }
+
+    public void sendMessage(String sourceEmail, String password, String token, String targetEmail, String message, Context context){
+        Log.d(TAG, "send_message called with email: " + targetEmail + " , message: " + message + " from email: " + sourceEmail + " with password: " + password);
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put("email", sourceEmail);
+        headerParams.put("password", password   );
+        headerParams.put("target_email", targetEmail);
+        headerParams.put("message", message);
+        headerParams.put("token", token);
+        doStringRequest("sendMessage", "/messaging/send_message", headerParams, Request.Method.POST, context);
     }
 
 
@@ -87,10 +97,10 @@ public class VolleyRequest {
         String custURL = url + urlExtension;
         StringRequest stringRequest = new StringRequest(method, custURL,
                 response -> {
-                    Log.d(TAG, "JSON Request Response: " + response);
+                    Log.d(TAG, "String Request Response: " + response);
                     handleResponse(function, response, context);
                 },error -> {
-                    Log.d(TAG, "JSON Request ErrorResponse: " + error.toString());
+                    Log.d(TAG, "String Request ErrorResponse: " + error.toString());
                     handleError(function, error, context);
                 }){
             @Override

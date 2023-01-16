@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        askNotificationPermission();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {

@@ -13,12 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.saylonn.chatapp.comm.VolleyCallbackListener;
+import com.saylonn.chatapp.interfaces.VolleyCallbackListener;
 import com.saylonn.chatapp.comm.VolleyRequest;
-import com.saylonn.chatapp.interfaces.CallbackInterface;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity implements VolleyCallbackListener {
     private Button loginButton;

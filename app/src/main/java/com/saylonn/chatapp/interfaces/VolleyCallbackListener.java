@@ -1,4 +1,4 @@
-package com.saylonn.chatapp.comm;
+package com.saylonn.chatapp.interfaces;
 
 import org.json.JSONObject;
 

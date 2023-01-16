@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="search_bar_background_color">#434343</color>
     <color name="lime">#8BC34A</color>
+    <color name="main_launcher_icon_background">#FFFFFF</color>
+    <color name="accent">#FF6200EE</color>
 </resources>

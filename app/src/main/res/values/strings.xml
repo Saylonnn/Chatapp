@@ -42,5 +42,8 @@
     <string name="account_created">Account erstellt.</string>
     <string name="faulty_input">Fehlerhafte Eingabe</string>
     <string name="email_already_in_use">Emailadresse nicht verfügbar</string>
+    <string name="newMessageAlert">Neue Nachricht</string>
+    <string name="default_notification_channel_id">default_notification_channel</string>
+    <string name="notification_id">notification_id</string>
 
 </resources>
