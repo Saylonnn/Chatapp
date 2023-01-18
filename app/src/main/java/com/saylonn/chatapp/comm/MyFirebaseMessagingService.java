@@ -102,14 +102,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed Token: " + token);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.edit().putString(getString(R.string.token_key), token).apply();
     }
-
 
     public boolean foregrounded() {
         ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();

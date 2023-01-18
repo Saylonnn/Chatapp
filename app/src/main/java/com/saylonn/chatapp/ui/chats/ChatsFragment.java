@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
 
 import com.saylonn.chatapp.R;
 import com.saylonn.chatapp.interfaces.VolleyCallbackListener;
@@ -22,6 +24,8 @@ import com.saylonn.chatapp.databinding.FragmentChatsBinding;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
 public class ChatsFragment extends Fragment implements VolleyCallbackListener {
@@ -31,6 +35,8 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
     Button sendTestMessageBtn;
     VolleyRequest volleyRequest;
     private final String TAG = "CAPP";
+    private SharedPreferences encrpytedSharedPreferences;
+    private String masterKeyAlias = null;
 
 
     ArrayList<ChatsModel> chatsModels = new ArrayList<>();
@@ -42,8 +48,27 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
 
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-
+        //lädt die verschlüsselten Shared Preferences -> aufrufen des Passwortes mit encryptedSharedPreferences.getString(.....
+        try {
+            masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            encrpytedSharedPreferences = EncryptedSharedPreferences.create(
+                    "secret_shared_prefs",
+                    masterKeyAlias,
+                    getActivity(),
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // der abschnitt ist nur zum Testen -> kannst du dann entfernen Karol
         volleyRequest = new VolleyRequest();
@@ -53,7 +78,7 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
         sendTestMessageBtn = binding.sendTestMessageButton;
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sourceEmail = sp.getString(String.valueOf(R.string.login_email), "none");
-        String password = sp.getString(String.valueOf(R.string.login_password), "none");
+        String password = encrpytedSharedPreferences.getString(String.valueOf(R.string.login_password), "none");
         String token = sp.getString(String.valueOf(R.string.token_key), "none");
 
 

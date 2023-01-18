@@ -24,22 +24,51 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.saylonn.chatapp.databinding.ActivityMainBinding;
 import com.saylonn.chatapp.ui.dialogs.ErrorDialog;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "CAPP";
     private boolean loggedIn = false;
     private ActivityMainBinding binding;
-    Context context;
+    private Context context;
+    private SharedPreferences encrpytedSharedPreferences;
+    private String masterKeyAlias = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         askNotificationPermission();
+
+        try {
+            masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        try {
+            encrpytedSharedPreferences = EncryptedSharedPreferences.create(
+                    "secret_shared_prefs",
+                    masterKeyAlias,
+                    this,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -59,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (!loggedIn) {
             String email = sp.getString(String.valueOf(R.string.login_email), "empty");
-            String password = sp.getString(String.valueOf(R.string.login_password), "empty");
+            String password = encrpytedSharedPreferences.getString(String.valueOf(R.string.login_password), "empty");
             String fcm_token = sp.getString(String.valueOf(R.string.token_key), "empty");
             Log.d(TAG, "Saved Credentials: email: " + email + " password: " + password);
             if (email.equals("empty") || password.equals("empty") || fcm_token.equals("empty")) {

@@ -1,6 +1,8 @@
 package com.saylonn.chatapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +20,9 @@ import com.saylonn.chatapp.comm.VolleyRequest;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 public class LoginActivity extends AppCompatActivity implements VolleyCallbackListener {
     private Button loginButton;
     private Button registerButton;
@@ -27,12 +32,34 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
     private SharedPreferences sharedPreferences;
     private VolleyRequest volleyRequest;
     private final String TAG = "CAPP";
+    private SharedPreferences encryptedSharedPreferencs;
+    private String masterKeyAlias = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        try {
+            masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            encryptedSharedPreferencs = EncryptedSharedPreferences.create(
+                    "secret_shared_prefs",
+                    masterKeyAlias,
+                    this,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         volleyRequest = new VolleyRequest();
         volleyRequest.addCallbackListener(this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -83,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
             String email = email_tv.getText().toString();
             String password = password_tv.getText().toString();
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            sharedPreferences.edit().putString(String.valueOf(R.string.login_password), password).apply();
+            encryptedSharedPreferencs.edit().putString(String.valueOf(R.string.login_password), password).apply();
             sharedPreferences.edit().putString(String.valueOf(R.string.login_email), email).apply();
             finish();
         }
