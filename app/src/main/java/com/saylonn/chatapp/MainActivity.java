@@ -10,13 +10,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -38,23 +35,31 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "CAPP";
     private boolean loggedIn = false;
     private ActivityMainBinding binding;
-    private Context context;
     private SharedPreferences encrpytedSharedPreferences;
     private String masterKeyAlias = null;
+    //prüft ob NotificationPermisson gegeben wurde (ab Android 13)
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted){
+                    //FCM SDK (and your App) can post Notifications
+                } else {
+                    showNotificationNotAllowedDialog();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         askNotificationPermission();
 
+        /*
+         * generieren des Verschüsselten SharedPreferences Objektes um das Verschlüsselte Passwort auszulesen
+         */
         try {
             masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
-
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         try {
             encrpytedSharedPreferences = EncryptedSharedPreferences.create(
@@ -64,11 +69,13 @@ public class MainActivity extends AppCompatActivity {
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
+
+        /*
+         * auslesen des aktuellen Firebasemessaging Tokens
+         */
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -83,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+     //wird gestartet nach dem der firebase messaging Token erfolgreich ausgelesen wurde
     private void doCreate() {
-        context = getApplicationContext();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (!loggedIn) {
             String email = sp.getString(String.valueOf(R.string.login_email), "empty");
@@ -96,13 +103,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        loggedIn = true;
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_chats, R.id.navigation_search, R.id.navigation_profile, R.id.navigation_settings)
                 .build();
@@ -112,32 +117,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * zeigt einen Dialog wenn Notifications Erlaubnis nicht erteilt wurde
+     */
     private void showNotificationNotAllowedDialog(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ErrorDialog errorDialog = new ErrorDialog();
         errorDialog.show(ft, "Notification not allowed");
     }
 
-    private final ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-               if (isGranted){
-                   //FCM SDK (and your App) can post Notifications
-               } else {
-                   showNotificationNotAllowedDialog();
-               }
-            });
+    /**
+     * Fragt nach der Permission wenn sie nicht erteilt wurde (>= Anroid 13
+     */
     private void askNotificationPermission() {
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
                     PackageManager.PERMISSION_GRANTED) {
                 // FCM SDK (and your app) can post notifications.
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                // TODO: display an educational UI explaining to the user the features that will be enabled
-                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-                //       If the user selects "No thanks," allow the user to continue without notifications.
             } else {
                 // Directly ask for the permission
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
@@ -145,13 +142,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Führt den Switch zur LoginActivity durch
+     */
     private void switchActivities(){
         Intent switchActivityIntent = new Intent(this, LoginActivity.class);
         startActivity(switchActivityIntent);
     }
-
-    public void setLoggedIn(){
-        loggedIn = true;
-    }
-
 }

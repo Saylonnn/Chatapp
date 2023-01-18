@@ -22,13 +22,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
+/**
+ * Volley Request stellt funktionen zur Verfügung und ruft anschließend die dazugehörigen Webrequests auf
+ */
 public class VolleyRequest {
     private static final String TAG = "CAPP";
     String url = "https://www.api.caylonn.de:1337";
     final private List<VolleyCallbackListener> callbackApps = new ArrayList<>();
 
+    /**
+     * prüft ob die angegeben daten von der API akzeptiert werden
+     * @param email - des Nutzers, in SharedPreferences gespeichert
+     * @param password- des Nutzers, in EncryptedSharedPreferences gespeichert
+     * @param token- token der App, in SharedPreferences gespeichert
+     * @param context - Context der Aufrufenden Activity - wichtig da VolleyRequest selber nicht auf den Context zugreifen kann
+     */
     public void login(String email, String password, String token, Context context){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         sp.edit().putString(String.valueOf(R.string.login_status), "not_tried").apply();
@@ -40,6 +49,14 @@ public class VolleyRequest {
         doStringRequest("login", "/auth/login", headerParams, Request.Method.GET, context);
     }
 
+    /**
+     * zum Registrieren bei der API
+     * @param username - angegeben durch den USER
+     * @param email - angegeben durch den USER
+     * @param password - angegeben durch den USER
+     * @param token  - token der App, in SharedPreferences gespeichert
+     * @param context - Context der Aufrufenden Activity - wichtig da VolleyRequest selber nicht auf den Context zugreifen kann
+     */
     public void register(String username, String email, String password, String token, Context context){
         //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         //sp.edit().putString(String.valueOf(R.string.login_status), "not_tried").apply();
@@ -52,6 +69,11 @@ public class VolleyRequest {
         doStringRequest("register", "/auth/register", headerParams, Request.Method.GET, context);
     }
 
+    /**
+     * fragt nach einer Liste von Usern die die angebene Buchstabenfolge beinhalten, kann ohne Credentials aufgerufen werden
+     * @param searchString - zu suchender String
+     * @param context - Context der Aufrufenden Activity - wichtig da VolleyRequest selber nicht auf den Context zugreifen kann
+     */
     public void listUsers(String searchString, Context context){
         Log.d(TAG, "list_users called with search String : " + searchString);
         Map<String, String> headerParams = new HashMap<>();
@@ -59,6 +81,15 @@ public class VolleyRequest {
         doJsonRequest("list_users", "/contacts/list_users", headerParams, Request.Method.GET, context);
     }
 
+    /**
+     * benachricht die API eine Nachricht senden zu wollen
+     * @param sourceEmail - email des Senders - in SharedPreferences gespeichert
+     * @param password - passwort des Senders - in EncryptedSharedPreferences gespeichert
+     * @param token - token der App - in SharedPreferences gespeichert
+     * @param targetEmail - adressierte Email - durch USER gegeben
+     * @param message - zu übermittelnde Nachricht
+     * @param context - Context der Aufrufenden Activity - wichtig da VolleyRequest selber nicht auf den Context zugreifen kann
+     */
     public void sendMessage(String sourceEmail, String password, String token, String targetEmail, String message, Context context){
         Log.d(TAG, "send_message called with email: " + targetEmail + " , message: " + message + " from email: " + sourceEmail + " with password: " + password);
         Map<String, String> headerParams = new HashMap<>();
@@ -70,7 +101,14 @@ public class VolleyRequest {
         doStringRequest("sendMessage", "/messaging/send_message", headerParams, Request.Method.POST, context);
     }
 
-
+    /**
+     * Übermittelt die JSON anfrage an das VolleyFramework
+     * @param function - in welcher function diese Methode aufgerufen wird (login, list_users, ...) - wird weitergereicht
+     * @param urlExtension - String der nach der Domain geschrieben wird damit es die api auf der richtigen adresse erhält
+     * @param headerParams - Parameter die in den Head geschrieben werden als Map, Credentials usw.
+     * @param method - Integer: Beschreibt die HTML Anfrage Methode POST, GET, ... als Request.Method.POST
+     * @param context - Context der Aufrufenden Activity - wichtig da VolleyRequest selber nicht auf den Context zugreifen kann
+     */
     private void doJsonRequest(String function, String urlExtension, Map<String, String> headerParams, int method, Context context){
         Log.d(TAG, "VolleyRequest doJsonRequest");
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -91,8 +129,14 @@ public class VolleyRequest {
         requestQueue.add(jsonRequest);
     }
 
-
-
+    /**
+     * Übermittelt die StringRequst an das VolleyFramework
+     * @param function - in welcher function diese Methode aufgerufen wird (login, list_users, ...) - wird weitergereicht
+     * @param urlExtension - String der nach der Domain geschrieben wird damit es die api auf der richtigen adresse erhält
+     * @param headerParams - Parameter die in den Head geschrieben werden als Map, Credentials usw.
+     * @param method - Integer: Beschreibt die HTML Anfrage Methode POST, GET, ... als Request.Method.POST
+     * @param context - Context der Aufrufenden Activity - wichtig da VolleyRequest selber nicht auf den Context zugreifen kann
+     */
     private void doStringRequest(String function, String urlExtension, Map<String, String> headerParams, int method, Context context){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         String custURL = url + urlExtension;
@@ -112,6 +156,12 @@ public class VolleyRequest {
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * handelt die Serverantwort nach einer StringRequest
+     * @param function - in welcher function diese Methode aufgerufen wird (login, list_users, ...) - wird weitergereicht
+     * @param message - Antwortnachricht des Servers
+     * @param context - Context der Aufrufenden Activity - wichtig da VolleyRequest selber nicht auf den Context zugreifen kann
+     */
     private void handleResponse(String function, String message, Context context){
         if(function.equals("login")){
             //read login server response
@@ -167,6 +217,13 @@ public class VolleyRequest {
             Log.d(TAG, "[VolleyRequest]{handleResponse}: " + message);
         }
     }
+
+    /**
+     * handelt die ServerResponse nach einer JsonRequest
+     * @param function - in welcher function diese Methode aufgerufen wird (login, list_users, ...) - wird weitergereicht
+     * @param json - vom Server übermittelte Antwort
+     * @param context - Context der Aufrufenden Activity - wichtig da VolleyRequest selber nicht auf den Context zugreifen kann
+     */
     private void handleJSONResponse(String function, JSONObject json, Context context){
         Log.d(TAG, "Handle JSON Response");
         if(function.equals("list_users")){
@@ -176,6 +233,12 @@ public class VolleyRequest {
         }
     }
 
+    /**
+     * Handelt den Fehlercode aller Webrequests
+     * @param function - in welcher function diese Methode aufgerufen wird (login, list_users, ...) - wird weitergereicht
+     * @param error - Fehler der WebRequest
+     * @param context - Context der Aufrufenden Activity - wichtig da VolleyRequest selber nicht auf den Context zugreifen kann
+     */
     private void handleError(String function, VolleyError error, Context context){
         //handle all Error responses
 
@@ -194,6 +257,12 @@ public class VolleyRequest {
 
     }
 
+    /**
+     * verteilt die Antwort der auf alle Objekte die das VolleyCallbackListener-Interface implementieren und sich als Observer eingetragen haben
+     * @param function - in welcher function diese Methode aufgerufen wird (login, list_users, ...) - wird weitergereicht
+     * @param message - die an die Objekte zu übermittelnde Nachricht
+     * beide Parameter werden nur übermittelt
+     */
     private void doCallback(String function, String message){
         for(VolleyCallbackListener vCL : callbackApps){
             vCL.callbackMethod(function, message);
@@ -204,7 +273,10 @@ public class VolleyRequest {
     //      Register new account
     //      sendMessage
 
-
+    /**
+     * Damit kann sich ein beliebiges Objekt was das VolleyCallbackListener-Interface implementiert als Observer eintragen
+     * @param ma - Das objekt was sich als Observer eintragen will
+     */
     public void addCallbackListener(VolleyCallbackListener ma){
         callbackApps.add(ma);
     }

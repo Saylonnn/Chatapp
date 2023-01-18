@@ -18,84 +18,89 @@ import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity implements VolleyCallbackListener {
     private final String TAG = "CAPP";
-    private EditText username_tv;
-    private EditText email_tv;
-    private EditText password_1_tv;
-    private EditText password_2_tv;
-    private Button register_button;
+    private EditText usernameTv;
+    private EditText emailTv;
+    private EditText passwordTv1;
+    private EditText passwordTv2;
+    private Button registerButton;
     private ProgressBar progressBar;
+    private VolleyRequest volleyRequest;
+    private SharedPreferences sharedPreferences;
+    private String fcmToken;
 
-    VolleyRequest volleyRequest;
-    SharedPreferences sharedPreferences;
-    String fcm_token;
-
+    /*
+    * wird bei starten der Activity ausgeführt
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
         volleyRequest = new VolleyRequest();
         volleyRequest.addCallbackListener(this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        username_tv = findViewById(R.id.register_username);
-        email_tv  = findViewById(R.id.register_email);
-        password_1_tv = findViewById(R.id.register_password1);
-        password_2_tv = findViewById(R.id.register_password2);
-        register_button = findViewById(R.id.register_button);
+        usernameTv = findViewById(R.id.register_username);
+        emailTv  = findViewById(R.id.register_email);
+        passwordTv1 = findViewById(R.id.register_password1);
+        passwordTv2 = findViewById(R.id.register_password2);
+        registerButton = findViewById(R.id.register_button);
         progressBar = findViewById(R.id.progressBar_registration);
         progressBar.setVisibility(View.GONE);
 
-        fcm_token = sharedPreferences.getString(String.valueOf(R.string.token_key), "none");
+        fcmToken = sharedPreferences.getString(String.valueOf(R.string.token_key), "none");
 
-
-
-        register_button.setOnClickListener(v -> {
-            String username = username_tv.getText().toString();
-            String email = email_tv.getText().toString();
-            String password_1 = password_1_tv.getText().toString();
-            String password_2 = password_2_tv.getText().toString();
+        registerButton.setOnClickListener(v -> {
+            String username = usernameTv.getText().toString();
+            String email = emailTv.getText().toString();
+            String password_1 = passwordTv1.getText().toString();
+            String password_2 = passwordTv2.getText().toString();
             
             String text = "username: "+ username + " email: " + email + " password_1: "+ password_1 + " password_2: "+ password_2;
             Log.d(TAG, text);
-            if(!fcm_token.equals("none")) {
+            if(!fcmToken.equals("none")) {
                 if (!email.equals("") && !username.equals("") && !password_1.equals("") && !password_2.equals("")) {
 
                     if (password_1.equals(password_2)) {
                         if(password_1.length() >= 8 && password_1.length() <= 20) {
-                            volleyRequest.register(username, email, password_1, fcm_token, RegisterActivity.this);
+                            volleyRequest.register(username, email, password_1, fcmToken, RegisterActivity.this);
                             progressBar.setVisibility(View.VISIBLE);
-                            register_button.setEnabled(false);
+                            registerButton.setEnabled(false);
                         }
                         else{
-                            password_1_tv.setError(this.getString(R.string.correct_password_length));
+                            passwordTv1.setError(this.getString(R.string.correct_password_length));
                         }
                     }
                     else{
-                        password_2_tv.setText("");
+                        passwordTv2.setText("");
                         String errorText = this.getString(R.string.passwords_must_be_equals);
-                        password_2_tv.setError(errorText);
+                        passwordTv2.setError(errorText);
                     }
                 }else{
                     if(username.equals("")) {
                         String errorText = this.getString(R.string.field_not_empty_allowed);
-                        username_tv.setError(errorText);
+                        usernameTv.setError(errorText);
                     }
                     if(email.equals("")) {
-                        email_tv.setError(this.getString(R.string.field_not_empty_allowed));
+                        emailTv.setError(this.getString(R.string.field_not_empty_allowed));
                     }
                     if(password_1.equals("")) {
-                        password_1_tv.setError(this.getString(R.string.field_not_empty_allowed));
+                        passwordTv1.setError(this.getString(R.string.field_not_empty_allowed));
                     }
                     if(password_2.equals("")) {
-                        password_2_tv.setError(this.getString(R.string.field_not_empty_allowed));
+                        passwordTv2.setError(this.getString(R.string.field_not_empty_allowed));
                     }
                 }
             }
         });
     }
 
+    /**
+    * Callbackmethode für die Asynchrone StringWebRequest
+    * @param function übergibt den Namen der funktion die in der volleyRequst Klasse aufgerufen wurde
+     *                 daran kann die Callbackmethode entscheiden ob sie etwas tun muss oder nicht
+     * @param message ergebnis der Webrequest
+     */
     @Override
     public void callbackMethod(String function, String message) {
         if(function.equals("register") && message.equals("accepted")){
@@ -104,10 +109,16 @@ public class RegisterActivity extends AppCompatActivity implements VolleyCallbac
             finish();
         }else{
             progressBar.setVisibility(View.GONE);
-            register_button.setEnabled(true);
+            registerButton.setEnabled(true);
         }
     }
 
+    /**
+     * Callbackmethode für die Asynchrone JsonWebRequest
+     * @param function übergibt den Namen der funktion die in der volleyRequst Klasse aufgerufen wurde
+     *                 daran kann die Callbackmethode entscheiden ob sie etwas tun muss oder nicht
+     * @param json ergebnis der JsonWebrequest
+     */
     @Override
     public void jsonCallbackMethod(String function, JSONObject json){
         if(function.equals("register")) {

@@ -26,8 +26,8 @@ import java.security.GeneralSecurityException;
 public class LoginActivity extends AppCompatActivity implements VolleyCallbackListener {
     private Button loginButton;
     private Button registerButton;
-    private TextView email_tv;
-    private TextView password_tv;
+    private TextView emailTv;
+    private TextView passwordTv;
     private ProgressBar progressBar;
     private SharedPreferences sharedPreferences;
     private VolleyRequest volleyRequest;
@@ -40,11 +40,10 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Generiert das verschlüsselte SharedPreferences Objekt
         try {
             masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
         try {
@@ -55,18 +54,15 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
         volleyRequest = new VolleyRequest();
         volleyRequest.addCallbackListener(this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-
-        email_tv = findViewById(R.id.loginEmail);
-        password_tv = findViewById(R.id.loginPassword);
+        emailTv = findViewById(R.id.loginEmail);
+        passwordTv = findViewById(R.id.loginPassword);
         progressBar = findViewById(R.id.progressBar);
 
         loginButton = findViewById(R.id.loginButton);
@@ -75,8 +71,8 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
         Log.d(TAG + " LoginActivity", "token = " + token);
 
         loginButton.setOnClickListener(v -> {
-            String email = email_tv.getText().toString();
-            String password = password_tv.getText().toString();
+            String email = emailTv.getText().toString();
+            String password = passwordTv.getText().toString();
             if(!email.equals("") && !password.equals("")){
                 if(!token.equals("none")) {
                     volleyRequest.login(email, password, token, LoginActivity.this);
@@ -99,16 +95,21 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
         });
     }
 
-
+    /**
+     * Callbackmethode für die Asynchrone StringWebRequest
+     * @param function übergibt den Namen der funktion die in der volleyRequst Klasse aufgerufen wurde
+     *                 daran kann die Callbackmethode entscheiden ob sie etwas tun muss oder nicht
+     * @param message ergebnis der Webrequest
+     */
     @Override
     public void callbackMethod(String function, String message) {
         if(function.equals("login") && message.equals("accepted")){
             String text = " LoginActivity" + "login accepted";
             Log.d(TAG, text);
-            email_tv = findViewById(R.id.loginEmail);
-            password_tv = findViewById(R.id.loginPassword);
-            String email = email_tv.getText().toString();
-            String password = password_tv.getText().toString();
+            emailTv = findViewById(R.id.loginEmail);
+            passwordTv = findViewById(R.id.loginPassword);
+            String email = emailTv.getText().toString();
+            String password = passwordTv.getText().toString();
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             encryptedSharedPreferencs.edit().putString(String.valueOf(R.string.login_password), password).apply();
             sharedPreferences.edit().putString(String.valueOf(R.string.login_email), email).apply();
@@ -120,6 +121,12 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
         }
     }
 
+    /**
+     * Callbackmethode für die Asynchrone JsonWebRequest
+     * @param function übergibt den Namen der funktion die in der volleyRequst Klasse aufgerufen wurde
+     *                 daran kann die Callbackmethode entscheiden ob sie etwas tun muss oder nicht
+     * @param json ergebnis der JsonWebrequest
+     */
     @Override
     public void jsonCallbackMethod(String function, JSONObject json){
         if(function.equals("login")) {
@@ -127,11 +134,14 @@ public class LoginActivity extends AppCompatActivity implements VolleyCallbackLi
         }
     }
 
+
+    //führt den wechsel zur RegisterActivity durch
     private void switchToRegisterActivity(){
         Intent switchActivityIntent = new Intent(this, RegisterActivity.class);
         startActivity(switchActivityIntent);
     }
 
+    //Verhindert das man die LoginActivity einfach zum MainScreen verlassen kann. Stattdessen schließt sich die App
     @Override
     public void onBackPressed(){
         moveTaskToBack(true);

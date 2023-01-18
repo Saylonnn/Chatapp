@@ -42,14 +42,6 @@ public class SearchFragment extends Fragment implements VolleyCallbackListener {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        //Searchleiste
-        //https://developer.android.com/develop/ui/views/search/search-dialog
-
-        //Liste an usern anzeigen mittels: RecyclerView
-
-        //final TextView textView = binding.textSearch;
-        //searchViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
         volleyRequest = new VolleyRequest();
         volleyRequest.addCallbackListener(this);
         searchView = binding.searchView;
@@ -59,13 +51,11 @@ public class SearchFragment extends Fragment implements VolleyCallbackListener {
                 volleyRequest.listUsers(query, getActivity());
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
         });
-
         return root;
     }
 
@@ -75,11 +65,24 @@ public class SearchFragment extends Fragment implements VolleyCallbackListener {
         binding = null;
     }
 
+    /**
+     * Hier nicht nötig auszuführen da das SearchFragment nie eine StringRequest ausführt
+     * Callbackmethode für die Asynchrone StringWebRequest
+     * @param function übergibt den Namen der funktion die in der volleyRequst Klasse aufgerufen wurde
+     *                 daran kann die Callbackmethode entscheiden ob sie etwas tun muss oder nicht
+     * @param message ergebnis der Webrequest
+     */
     @Override
     public void callbackMethod(String function, String message) {
 
     }
 
+    /**
+     * Callbackmethode für die Asynchrone JsonWebRequest
+     * @param function übergibt den Namen der funktion die in der volleyRequst Klasse aufgerufen wurde
+     *                 daran kann die Callbackmethode entscheiden ob sie etwas tun muss oder nicht
+     * @param json ergebnis der JsonWebrequest
+     */
     @Override
     public void jsonCallbackMethod(String function, JSONObject json) {
         if(function.equals("list_users")){
@@ -88,6 +91,10 @@ public class SearchFragment extends Fragment implements VolleyCallbackListener {
 
     }
 
+    /**
+     * Zeigt alle Elemente des übergebenen JsonObject als Listenelement im RecyclerView an
+     * @param json - JSONObjekt mit allen Usern die den gesuchten String enthalten
+     */
     private void displayItems(JSONObject json){
         recyclerView = binding.searchRcView;
         recyclerView.setHasFixedSize(true);

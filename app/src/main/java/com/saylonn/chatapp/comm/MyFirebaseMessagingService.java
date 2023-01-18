@@ -31,11 +31,12 @@ import java.util.Objects;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "CAPP";
 
+    /**
+     * wird ausgeführt wenn eine Nachricht vom FirebaseMessagingService eintrifft
+     */
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         String fromUser = "";
-        String messageText;
-        String fromEmail;
         String title;
 
         super.onMessageReceived(remoteMessage);
@@ -46,10 +47,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "map: " + jsonData);
             Log.d(TAG, "from user: " + jsonData.get("fromUser"));
             fromUser = jsonData.get("fromUser");
-            messageText = jsonData.get("messageText");
-            fromEmail = jsonData.get("fromEmail");
 
-
+            //FÜR KAROL
             //karol hier musst du das zeug zu deiner activity weiterleiten und dann dort anzeigen
             // das hier wird immer inapp ausgeführt wenn eine Nachricht ankommt
             // hier müsstest du das in dein SQL Lite schreiben
@@ -59,6 +58,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
         }
+        // Wenn sich die App im Hintergrund befindet soll eine Notification angezeigt werden
         if(!foregrounded()) {
             if (remoteMessage.getNotification() != null) {
                 int notificationID = sharedPreferences.getInt(String.valueOf(R.string.notification_id), 0);
@@ -102,13 +102,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
+    /**
+     * Wird aufgerufen wenn die App einen neuen fcm_Token erhält. Das passiert eigentlich nur Neuinstallation oder cache Löschung
+      * @param token eindeutiger Token der vom FCM Framework übermittelt wird
+     */
     @Override
-    public void onNewToken(String token) {
+    public void onNewToken(@NonNull String token) {
         Log.d(TAG, "Refreshed Token: " + token);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.edit().putString(getString(R.string.token_key), token).apply();
     }
 
+    // prüft ob sich die App im Vordergrund befindet oder nicht
     public boolean foregrounded() {
         ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
         ActivityManager.getMyMemoryState(appProcessInfo);
