@@ -43,6 +43,15 @@
     <string name="default_notification_channel_id" translatable="false">default_notification_channel</string>
     <string name="notification_id" translatable="false">notification_id</string>
     <string name="target_adress_not_available">Emailadress not available</string>
+    <string name="darkmode" translatable="false">Darkmode</string>
+    <string name="language">Language: </string>
+    <string name="switch_on">On</string>
+    <string name="switch_off">Off</string>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Deutsch</item>
+        <item>Polski</item>
+    </string-array>
 
 
 </resources>
