@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/search_bar_background_color"/>
+        android:background="@color/lime"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchRcView"

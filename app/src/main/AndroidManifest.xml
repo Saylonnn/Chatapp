@@ -54,7 +54,8 @@
         </activity>
         <activity
             android:name=".ui.chats.OpenChatActivity"
-            android:exported="true">
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

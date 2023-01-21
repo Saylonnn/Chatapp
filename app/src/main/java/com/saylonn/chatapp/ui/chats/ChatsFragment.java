@@ -2,24 +2,25 @@ package com.saylonn.chatapp.ui.chats;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
 import com.saylonn.chatapp.R;
+import com.saylonn.chatapp.chathandler.Chat;
+import com.saylonn.chatapp.chathandler.ChatAdapter;
+import com.saylonn.chatapp.chathandler.ChatDao;
+import com.saylonn.chatapp.chathandler.ChatDatabase;
 import com.saylonn.chatapp.interfaces.VolleyCallbackListener;
-import com.saylonn.chatapp.comm.VolleyRequest;
 import com.saylonn.chatapp.databinding.FragmentChatsBinding;
 
 import org.json.JSONObject;
@@ -27,24 +28,19 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatsFragment extends Fragment implements VolleyCallbackListener {
     private FragmentChatsBinding binding;
-    EditText testEmailTv;
-    EditText testMessageTv;
-    Button sendTestMessageBtn;
-    VolleyRequest volleyRequest;
+
     private final String TAG = "CAPP";
     private SharedPreferences encrpytedSharedPreferences;
     private String masterKeyAlias = null;
-
 
     ArrayList<ChatsModel> chatsModels = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ChatsViewModel chatsViewModel =
-                new ViewModelProvider(this).get(ChatsViewModel.class);
 
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -70,42 +66,22 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
             e.printStackTrace();
         }
 
-        // der abschnitt ist nur zum Testen -> kannst du dann entfernen Karol
-        volleyRequest = new VolleyRequest();
-        volleyRequest.addCallbackListener(this);
-        testEmailTv = binding.testEmailTv;
-        testMessageTv = binding.testMessageTv;
-        sendTestMessageBtn = binding.sendTestMessageButton;
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sourceEmail = sp.getString(String.valueOf(R.string.login_email), "none");
-        String password = encrpytedSharedPreferences.getString(String.valueOf(R.string.login_password), "none");
-        String token = sp.getString(String.valueOf(R.string.token_key), "none");
 
+        RecyclerView recyclerView = root.findViewById(R.id.chat_recycler_view);    // NEED TO CHECK LATER
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
 
-        sendTestMessageBtn.setOnClickListener(v -> {
-            if(testEmailTv.getText().toString().equals("")) {
-                testEmailTv.setError("darf nicht leer sein");
-            }else if(testMessageTv.getText().toString().equals("")){
-                testMessageTv.setError("darf nicht leer sein");
-            }else {
-                if (sourceEmail.equals("none") || password.equals("none") || token.equals("none")) {
-                    Toast.makeText(getActivity(), "Bitte erneut einloggen!", Toast.LENGTH_SHORT).show();
-                } else {
-                    String targetEmail = testEmailTv.getText().toString();
-                    String message = testMessageTv.getText().toString();
-                    Log.d(TAG, "targetEmail: " + targetEmail + " message: " + message);
-                    volleyRequest.sendMessage(sourceEmail, password, token, targetEmail, message, getActivity());
-                }
-            }
-        });
+        ChatDatabase chatDatabase = Room.databaseBuilder(getContext(), ChatDatabase.class, "ChatDatabase")
+                .allowMainThreadQueries().build();
+        ChatDao chatDao = chatDatabase.chatDao();
 
+        List<Chat> chatList = chatDao.getAllChats();
 
-                //final TextView textView = binding.textChats;
-        //chatsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        ChatAdapter adapter = new ChatAdapter(chatList);
+        recyclerView.setAdapter(adapter);
+
         return root;
     }
-
-
 
 
     @Override
@@ -130,4 +106,5 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
     public void jsonCallbackMethod(String function, JSONObject json) {
 
     }
+
 }

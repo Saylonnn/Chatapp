@@ -1,83 +1,87 @@
 package com.saylonn.chatapp.ui.chats;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.saylonn.chatapp.R;
+import com.saylonn.chatapp.chathandler.Chat;
 import com.saylonn.chatapp.chathandler.ChatDatabase;
-import com.saylonn.chatapp.chathandler.CustomAdapter;
+import com.saylonn.chatapp.chathandler.Message;
+import com.saylonn.chatapp.chathandler.MessageAdapter;
+import com.saylonn.chatapp.chathandler.MessageDao;
+import com.saylonn.chatapp.comm.VolleyRequest;
+import com.saylonn.chatapp.interfaces.VolleyCallbackListener;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
 
-public class OpenChatActivity extends AppCompatActivity {
+import java.util.List;
 
-    ChatDatabase chatDatabase;
-    ArrayList<String> message_id;
-    ArrayList<String> sender;
-    ArrayList<String> message;
-    CustomAdapter customAdapter;
+public class OpenChatActivity extends AppCompatActivity implements VolleyCallbackListener {
 
     RecyclerView recyclerView;
     Button sendButton;
     TextInputEditText messageField;
+    List<Message> messageList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceBundle) {
         super.onCreate(savedInstanceBundle);
         setContentView(R.layout.fragment_open_chat);
 
+        String chatEmail = this.getIntent().getExtras().getString("chatEmail");
+
         recyclerView = findViewById(R.id.openChatRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+
+        ChatDatabase chatDatabase = Room.databaseBuilder(this, ChatDatabase.class, "ChatDatabase")
+                .allowMainThreadQueries().build();
+        MessageDao messageDao = chatDatabase.messageDao();
+
         sendButton = findViewById(R.id.button_send_message);
         messageField = findViewById(R.id.messageInputField);
 
+        messageList = messageDao.getAllMessages(chatEmail);
+
+        MessageAdapter adapter = new MessageAdapter(messageList);
+        recyclerView.setAdapter(adapter);
+
+        if(messageList.size() > 0) {
+            recyclerView.smoothScrollToPosition(messageList.size() - 1);
+        }
+
+        VolleyRequest volleyRequest = new VolleyRequest();
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage();
+                Message message = new Message("localUser", messageField.getText().toString().trim(), chatEmail);
+                messageDao.insert(message);
+                messageList.add(message);
+
+                MessageAdapter adapter = new MessageAdapter(messageList);
+                recyclerView.setAdapter(adapter);
             }
         });
 
-        chatDatabase = new ChatDatabase(OpenChatActivity.this);
-        message_id = new ArrayList<>();
-        sender = new ArrayList<>();
-        message = new ArrayList<>();
 
-        storeDataInArrays();
-
-        customAdapter = new CustomAdapter(OpenChatActivity.this, message_id, sender, message);
-        recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(OpenChatActivity.this));
-        recyclerView.smoothScrollToPosition(message.size()-1);
 
     }
 
-    void sendMessage() {
-        chatDatabase.addLocalMessage("localUser", messageField.getText().toString().trim());
-        message.add(messageField.getText().toString().trim());
-        customAdapter.notifyDataSetChanged();
-        messageField.setText("");
-        recyclerView.smoothScrollToPosition(message.size()-1);
+    @Override
+    public void callbackMethod(String function, String message) {
+
     }
 
-    void storeDataInArrays() {
-        Cursor cursor = chatDatabase.readMyData();
+    @Override
+    public void jsonCallbackMethod(String function, JSONObject json) {
 
-        if(cursor.getCount() == 0){
-            Toast.makeText(this, "There is no Data.", Toast.LENGTH_SHORT).show();
-        } else {
-            while(cursor.moveToNext()){
-                message_id.add(cursor.getString(0));
-                sender.add(cursor.getString(1));
-                message.add(cursor.getString(2));
-            }
-        }
     }
 }

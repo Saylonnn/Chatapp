@@ -25,14 +25,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <Button
-
+        <ImageButton
             android:id="@+id/searchRcButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:textSize="10sp" />
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:textSize="22sp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_add_24"
+            android:background="@color/lime"/>
     </LinearLayout>
 
 

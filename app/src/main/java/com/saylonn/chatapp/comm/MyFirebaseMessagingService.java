@@ -17,11 +17,15 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.room.Room;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.saylonn.chatapp.MainActivity;
 import com.saylonn.chatapp.R;
+import com.saylonn.chatapp.chathandler.ChatDatabase;
+import com.saylonn.chatapp.chathandler.Message;
+import com.saylonn.chatapp.chathandler.MessageDao;
 
 
 import java.util.Map;
@@ -55,7 +59,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //Am besten du erstellst eine Tabelle wo alle noch nicht angeschauten nachrichten drin stehen
             //beim Launch der App müssten die dann ausgelesen und angezeigt werden
             //du kannst von hier aus leider keine Methode von dir callen da diese sonst static sein müsste
+            ChatDatabase chatDatabase = Room.databaseBuilder(this, ChatDatabase.class, "ChatDatabase")
+                    .allowMainThreadQueries().build();
+            MessageDao messageDao = chatDatabase.messageDao();
 
+            Message message = new Message("remoteUser", fromUser, jsonData.get("messageText"));
 
         }
         // Wenn sich die App im Hintergrund befindet soll eine Notification angezeigt werden
