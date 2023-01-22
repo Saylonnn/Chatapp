@@ -43,6 +43,7 @@ public class CustomSearchViewHolder extends RecyclerView.ViewHolder{
         String username = textUsername.getText().toString().trim();
         String email = textEmail.getText().toString().trim();
 
+
         Chat chat = new Chat(username, email, "");
         chatDao.insert(chat);
 

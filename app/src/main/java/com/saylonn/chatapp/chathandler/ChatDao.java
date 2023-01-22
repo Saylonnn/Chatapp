@@ -26,4 +26,7 @@ public interface ChatDao {
     @Query("SELECT * FROM chat ORDER BY id ASC")
     List<Chat> getAllChats();
 
+    @Query("SELECT EXISTS(SELECT * FROM chat WHERE email = :email)")
+    Boolean isRowIsExist(String email);
+
 }

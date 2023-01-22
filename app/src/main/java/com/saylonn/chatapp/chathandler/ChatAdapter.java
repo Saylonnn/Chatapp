@@ -22,6 +22,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ *
+ */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
     private List<Chat> chats = new ArrayList<>();
 

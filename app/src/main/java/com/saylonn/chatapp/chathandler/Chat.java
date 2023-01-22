@@ -6,6 +6,9 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
+/***
+ * Chat Tabelle in der DB
+ */
 @Entity(indices = {@Index(value = {"email"},unique = true)})
 public class Chat implements Serializable {
 
@@ -38,6 +41,10 @@ public class Chat implements Serializable {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setLast_msg(String last_msg) {
+        this.last_msg = last_msg;
     }
 
     public String getLast_msg() {

@@ -23,6 +23,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.saylonn.chatapp.MainActivity;
 import com.saylonn.chatapp.R;
+import com.saylonn.chatapp.chathandler.Chat;
+import com.saylonn.chatapp.chathandler.ChatDao;
 import com.saylonn.chatapp.chathandler.ChatDatabase;
 import com.saylonn.chatapp.chathandler.Message;
 import com.saylonn.chatapp.chathandler.MessageDao;
@@ -61,9 +63,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //du kannst von hier aus leider keine Methode von dir callen da diese sonst static sein müsste
             ChatDatabase chatDatabase = Room.databaseBuilder(this, ChatDatabase.class, "ChatDatabase")
                     .allowMainThreadQueries().build();
-            MessageDao messageDao = chatDatabase.messageDao();
 
+            ChatDao chatDao = chatDatabase.chatDao();
+
+            if(!chatDao.isRowIsExist(fromUser)){
+                Chat chat = new Chat("", fromUser, jsonData.get("messageText"));
+                chatDao.insert(chat);
+            }
+
+            MessageDao messageDao = chatDatabase.messageDao();
             Message message = new Message("remoteUser", fromUser, jsonData.get("messageText"));
+            messageDao.insert(message);
+            
+
 
         }
         // Wenn sich die App im Hintergrund befindet soll eine Notification angezeigt werden
