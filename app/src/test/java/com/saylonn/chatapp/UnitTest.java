@@ -14,25 +14,25 @@ import java.util.ArrayList;
 
 public class UnitTest {
     @Test
-    public void ContactToGetUsername(){
-        String name = "test";
-        String mail = "test@gmail.com";
+    public void Contact_To_GetUsername(){
+        String username = "test";
+        String email = "test@gmail.com";
         String expected = "test";
-        Contact test = new Contact(name, mail);
+        Contact test = new Contact(username, email);
         String actual = test.getUsername();
         assertEquals(expected, actual);
     }
     @Test
-    public void ContactToGetEmail(){
-        String name = "test";
-        String mail = "test@gmail.com";
+    public void Contact_To_GetEmail(){
+        String username = "test";
+        String email = "test@gmail.com";
         String expected ="test@gmail.com";
-        Contact test = new Contact(name, mail);
+        Contact test = new Contact(username, email);
         String actual = test.getEmail();
         assertEquals(expected, actual);
     }
     @Test
-    public void CustomSearchAdapterToGetItemCount_0Items(){
+    public void CustomSearchAdapter_To_GetItemCount_0Items(){
         ArrayList<Contact> list = new ArrayList<>();
         Context context = null;
         CustomSearchAdapter test = new CustomSearchAdapter(context , list);
@@ -41,14 +41,14 @@ public class UnitTest {
         assertEquals(expected, actual);
     }
     @Test
-    public void CustomSearchAdapterToGetItemCount_2Items(){
+    public void CustomSearchAdapter_To_GetItemCount_2Items(){
         ArrayList<Contact> list = new ArrayList<>();
-        String name = "test";
-        String mail = "test@gmail.com";
-        Contact contact = new Contact(name, mail);
-        name = "tester";
-        mail = "tester@gmail.com";
-        Contact contact2 = new Contact(name, mail);
+        String username = "test";
+        String email = "test@gmail.com";
+        Contact contact = new Contact(username, email);
+        username = "tester";
+        email = "tester@gmail.com";
+        Contact contact2 = new Contact(username, email);
         list.add(contact);
         list.add(contact2);
         Context context = null;
