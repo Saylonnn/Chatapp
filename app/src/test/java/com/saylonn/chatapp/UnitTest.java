@@ -32,7 +32,7 @@ public class UnitTest {
         assertEquals(expected, actual);
     }
     @Test
-    public void CustomSearchAdapterToGetItemCount0Items(){
+    public void CustomSearchAdapterToGetItemCount_0Items(){
         ArrayList<Contact> list = new ArrayList<>();
         Context context = null;
         CustomSearchAdapter test = new CustomSearchAdapter(context , list);
@@ -41,7 +41,7 @@ public class UnitTest {
         assertEquals(expected, actual);
     }
     @Test
-    public void CustomSearchAdapterToGetItemCount2Items(){
+    public void CustomSearchAdapterToGetItemCount_2Items(){
         ArrayList<Contact> list = new ArrayList<>();
         String name = "test";
         String mail = "test@gmail.com";
