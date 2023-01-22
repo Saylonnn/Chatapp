@@ -54,28 +54,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "from user: " + jsonData.get("fromUser"));
             fromUser = jsonData.get("fromUser");
 
-            //FÜR KAROL
-            //karol hier musst du das zeug zu deiner activity weiterleiten und dann dort anzeigen
-            // das hier wird immer inapp ausgeführt wenn eine Nachricht ankommt
-            // hier müsstest du das in dein SQL Lite schreiben
-            //Am besten du erstellst eine Tabelle wo alle noch nicht angeschauten nachrichten drin stehen
-            //beim Launch der App müssten die dann ausgelesen und angezeigt werden
-            //du kannst von hier aus leider keine Methode von dir callen da diese sonst static sein müsste
             ChatDatabase chatDatabase = Room.databaseBuilder(this, ChatDatabase.class, "ChatDatabase")
                     .allowMainThreadQueries().build();
 
             ChatDao chatDao = chatDatabase.chatDao();
 
+            // Wenn der User noch keinen Tabelleneintrag hat, wird er erst hinzugefügt
             if(!chatDao.isRowIsExist(fromUser)){
                 Chat chat = new Chat("", fromUser, jsonData.get("messageText"));
                 chatDao.insert(chat);
             }
 
+            // Es wird eine neue Nachricht erstellt und in die Message Tabelle hinzugefügt
             MessageDao messageDao = chatDatabase.messageDao();
             Message message = new Message("remoteUser", fromUser, jsonData.get("messageText"));
             messageDao.insert(message);
-            
-
 
         }
         // Wenn sich die App im Hintergrund befindet soll eine Notification angezeigt werden

@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 /***
  * Chat Tabelle in der DB
+ * email dient als Identifier um die erhaltenen Nachrichten dem richtigen Eintrag zuzuordnen
  */
 @Entity(indices = {@Index(value = {"email"},unique = true)})
 public class Chat implements Serializable {
@@ -21,6 +22,13 @@ public class Chat implements Serializable {
 
     private String last_msg;
 
+    /***
+     * Um einen Chat in die Tabelle hinzufügen zu können
+     *
+     * @param username Benutzername der Person zu der man sendet
+     * @param email Email der Person zu der man sendet
+     * @param last_msg Letzte Nachricht die unter dem Benutzernamen angezeigt wird
+     */
     public Chat(String username, String email, String last_msg) {
         this.username = username;
         this.email = email;

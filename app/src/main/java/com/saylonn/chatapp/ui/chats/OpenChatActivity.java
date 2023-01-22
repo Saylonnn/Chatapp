@@ -32,6 +32,9 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.prefs.PreferenceChangeEvent;
 
+/**
+ * Activity die geöffnet wird, wenn man in dem ChatsFragment auf einen Chat klickt
+ */
 public class OpenChatActivity extends AppCompatActivity implements VolleyCallbackListener {
 
     RecyclerView recyclerView;
@@ -49,6 +52,7 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
         super.onCreate(savedInstanceBundle);
         setContentView(R.layout.fragment_open_chat);
 
+        // Man bekommt das Intent mit der Email auf die man geklickt hat, damit die dazugehörigen Nachrichten geladen werden
         String chatEmail = this.getIntent().getExtras().getString("chatEmail");
 
         recyclerView = findViewById(R.id.openChatRecyclerView);
@@ -71,6 +75,7 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
             recyclerView.smoothScrollToPosition(messageList.size() - 1);
         }
 
+        // Wird zum Senden der Nachrichten benötigt
         try{
             masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
         } catch (GeneralSecurityException e) {
@@ -98,6 +103,7 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
         String password = encryptedSP.getString(String.valueOf(R.string.login_password), "none");
         String token = sp.getString(String.valueOf(R.string.token_key), "none");
 
+        // Beim klicken auf den Sendebutton wird die Nachricht in die Datenbank gespeichert und mithilfe des VolleyRequests an den entsprechenden User gesendet
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

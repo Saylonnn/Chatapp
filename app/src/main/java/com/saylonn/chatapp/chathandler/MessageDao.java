@@ -8,6 +8,11 @@ import androidx.room.Update;
 
 import java.util.List;
 
+/**
+ * Ein DAO wo die Datenbank Interaktionen für die Message Tabelle definiert werden
+ * Man schreibt nur die Queries und Namen der Funktionen und diese werden
+ * automatisch durch Android Room generiert
+ */
 @Dao
 public interface MessageDao {
 
@@ -23,6 +28,11 @@ public interface MessageDao {
     @Query("DELETE FROM chat")
     void deleteAllMessages();
 
+    /**
+     * Zum laden der Nachrichten die zu der jeweiligen Email gehören
+     * @param chatEmail Email der Person mit der man schreibt
+     * @return Gibt die Liste der zugehörigen Nachrichten
+     */
     @Query("SELECT * FROM message WHERE chatEmail = :chatEmail ORDER BY id ASC")
     List<Message> getAllMessages(String chatEmail);
 

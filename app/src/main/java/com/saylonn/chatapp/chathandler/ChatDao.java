@@ -8,6 +8,11 @@ import androidx.room.Update;
 
 import java.util.List;
 
+/**
+ * Ein DAO wo die Datenbank Interaktionen für die Chat Tabelle definiert werden
+ * Man schreibt nur die Queries und Namen der Funktionen und diese werden
+ * automatisch durch Android Room generiert
+ */
 @Dao
 public interface ChatDao {
 

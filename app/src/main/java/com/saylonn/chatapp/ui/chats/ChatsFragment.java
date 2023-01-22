@@ -30,14 +30,15 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Chat Fragment wo alle offenen Chats aufgelistet werden
+ */
 public class ChatsFragment extends Fragment implements VolleyCallbackListener {
     private FragmentChatsBinding binding;
 
     private final String TAG = "CAPP";
     private SharedPreferences encrpytedSharedPreferences;
     private String masterKeyAlias = null;
-
-    ArrayList<ChatsModel> chatsModels = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -66,8 +67,8 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
             e.printStackTrace();
         }
 
-
-        RecyclerView recyclerView = root.findViewById(R.id.chat_recycler_view);    // NEED TO CHECK LATER
+        // Alle Chats werden in einem RecylerView aus der ChatDatenbak (Chat Tabelle) geladen
+        RecyclerView recyclerView = root.findViewById(R.id.chat_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
@@ -98,7 +99,7 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
     public void callbackMethod(String function, String message) {
         if(function.equals("send_message")){
             if(message.equals("accepted"));
-            Toast.makeText(getActivity(), "NAchricht versandt", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Nachricht versandt", Toast.LENGTH_SHORT).show();
         }
     }
 

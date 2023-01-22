@@ -22,8 +22,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/***
- *
+/**
+ * Adapter um die Chats in einer RecyclerView Liste anzeigen zu können
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
     private List<Chat> chats = new ArrayList<>();
@@ -36,6 +36,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
         return new ChatHolder(itemView);
     }
 
+    /**
+     * On Click Funktion, bei der geschaut wird welcher Nutzer angeklickt wurde
+     * Die Email der Person wird in einem Intent gespeichert
+     * Danach wird die die OpenChatActivity mit den zugehörigen Nachrichten angezeigt
+     */
     @Override
     public void onBindViewHolder(@NonNull ChatHolder holder, int position) {
         Chat currentChat = chats.get(position);
