@@ -52,7 +52,7 @@ public class UnitTest {
         list.add(contact);
         list.add(contact2);
         Context context = null;
-        CustomSearchAdapter test = new CustomSearchAdapter(context , list);
+        CustomSearchAdapter test = new CustomSearchAdapter(context, list);
         String expected = "2";
         String actual = String.valueOf(test.getItemCount());
         assertEquals(expected, actual);
