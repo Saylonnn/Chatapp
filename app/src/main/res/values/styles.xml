@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Spinner" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">#0000FF</item>
+    </style>
+
+
+</resources>

@@ -9,12 +9,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -27,6 +30,7 @@ import androidx.security.crypto.MasterKeys;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.saylonn.chatapp.databinding.ActivityMainBinding;
 import com.saylonn.chatapp.ui.dialogs.ErrorDialog;
+import com.saylonn.chatapp.ui.settings.SettingsFragment;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;

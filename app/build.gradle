@@ -8,6 +8,7 @@ android {
     compileSdk 33
 
     defaultConfig {
+        resConfigs ("en", "de-rDE")
         applicationId "com.saylonn.chatapp"
         minSdk 26
         targetSdk 33

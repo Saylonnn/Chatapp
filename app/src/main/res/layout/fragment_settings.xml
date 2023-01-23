@@ -5,15 +5,15 @@
     android:id="@+id/loginButton"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/Screen"
     tools:context=".ui.search.SearchFragment">
 
     <Switch
         android:id="@+id/switchForDarkmode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:text="@string/darkmode"
-        android:textOff="@string/switch_off"
-        android:textOn="@string/switch_on"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,17 +27,22 @@
 
     <Spinner
         android:id="@+id/spinnerLanguage"
+        style="@style/Spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:entries="@array/languagesArray"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewLanguage"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textViewLanguage"
-        app:layout_constraintTop_toBottomOf="@+id/switchForDarkmode" />
+        app:layout_constraintTop_toTopOf="@+id/textViewLanguage" />
 
     <TextView
         android:id="@+id/textViewLanguage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Texts"
         android:layout_marginTop="52dp"
         android:text="@string/language"
         app:layout_constraintStart_toStartOf="@+id/switchForDarkmode"

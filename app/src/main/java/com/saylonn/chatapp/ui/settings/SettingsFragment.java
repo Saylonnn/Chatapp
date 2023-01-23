@@ -2,9 +2,14 @@ package com.saylonn.chatapp.ui.settings;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,101 +22,105 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.saylonn.chatapp.R;
 import com.saylonn.chatapp.comm.VolleyRequest;
 import com.saylonn.chatapp.databinding.FragmentSettingsBinding;
+import com.saylonn.chatapp.utils.LanguageConfig;
 
-public class SettingsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+import java.util.Locale;
+
+public class SettingsFragment extends Fragment {
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     private final VolleyRequest volleyRequest = new VolleyRequest();
     private final String TAG = "SettingsFragment";
 
     private FragmentSettingsBinding binding;
 
-    private Switch switchDarkmode;
-    private Spinner spinnerLanguages;
+    private Switch switchForDarkmode;
 
-    private String MY_PREFS = "switch_prefs";
-    private String DARKMODE_STATUS = "Darkmode on";
-    private String SWITCH_STATUS = "switch_status";
+    private Spinner spinnerLanguages;;
 
-    boolean switch_status;
-    boolean darkmode_status;
 
-    SharedPreferences myPreferences;
-    SharedPreferences.Editor myEditor;
+    SharedPreferences sharedPreferences;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SettingsViewModel settingsViewModel =
-                new ViewModelProvider(this).get(SettingsViewModel.class);
+        //SettingsViewModel settingsViewModel =
+          //      new ViewModelProvider(this).get(SettingsViewModel.class);
 
-        binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        //binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        //View root = binding.getRoot();
 
-        myPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        switchDarkmode = (Switch) binding.switchForDarkmode;
+        View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        switchDarkmode = (Switch) getActivity().findViewById(R.id.switchForDarkmode);
 
-        myPreferences = getActivity().getSharedPreferences(MY_PREFS, MODE_PRIVATE);
-        myEditor = getActivity().getSharedPreferences(MY_PREFS,MODE_PRIVATE).edit();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        switch_status = myPreferences.getBoolean(SWITCH_STATUS, false);
-        darkmode_status = myPreferences.getBoolean(DARKMODE_STATUS, false);
+        switchForDarkmode = (Switch) root.findViewById(R.id.switchForDarkmode);
 
-        /*
-
-        switchDarkmode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchForDarkmode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (compoundButton.isChecked()){
-                    myEditor.putBoolean(SWITCH_STATUS, true);
-                    myEditor.putBoolean(DARKMODE_STATUS, true);
-                    myEditor.apply();
-                    switchDarkmode.setChecked(true);
-                }else{
-                    myEditor.putBoolean(SWITCH_STATUS, false);
-                    myEditor.putBoolean(DARKMODE_STATUS, false);
-                    myEditor.apply();
-                    switchDarkmode.setChecked(false);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("XX", "Test");
+                if (isChecked) {
+                    // Dark Mode aktivieren
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    //getActivity().setTheme(R.style.Theme_Chatapp);
+                    sharedPreferences.edit().putBoolean("isDarKMode", true).apply();
+                } else {
+                    // Dark Mode deaktivieren
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    //getActivity().setTheme(R.style.Theme_Chatapp);
+                    sharedPreferences.edit().putBoolean("isDarkMode", false).apply();
                 }
+                //requireActivity().recreate();
             }
         });
-         */
 
-        spinnerLanguages = binding.spinnerLanguage;
-        /*
-        spinnerLanguages = getView().findViewById(R.id.spinnerLanguage);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.languages, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLanguages = (Spinner) root.findViewById(R.id.spinnerLanguage);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.languagesArray, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
         spinnerLanguages.setAdapter(adapter);
-        spinnerLanguages.setOnItemSelectedListener(this);
 
+        spinnerLanguages.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-         */
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedLanguage = adapterView.getItemAtPosition(i).toString();
+                String languageToLoad = null;
+
+                Locale locale =  Locale.getDefault();
+
+                if (selectedLanguage.equals("English")){
+                    locale = Locale.ENGLISH;
+                }else if(selectedLanguage.equals("Deutsch")){
+                    locale = Locale.GERMANY;
+                }
+                if (languageToLoad!= null){
+                    Log.d("XXX", "Test");
+                    locale = new Locale(languageToLoad);
+                    Locale.setDefault(locale);
+                    Configuration configuration = new Configuration();
+                    configuration.setLocale(locale);
+                    Context context = getContext().createConfigurationContext(configuration);
+
+                    //AppCompatDelegate.setApplicationLocales(appLocale);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         return root;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String text = adapterView.getItemAtPosition(i).toString();
-        Toast.makeText(adapterView.getContext(), text, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 }
