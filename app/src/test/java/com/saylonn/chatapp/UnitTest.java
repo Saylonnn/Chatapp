@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class UnitTest {
     @Test
+    //Überprüft, ob Contact den Usernamen richtig Weitergibt
     public void Contact_To_GetUsername(){
         String username = "test";
         String email = "test@gmail.com";
@@ -23,6 +24,7 @@ public class UnitTest {
         assertEquals(expected, actual);
     }
     @Test
+    //Überprüft, ob Contact die Email richtig weitergibt
     public void Contact_To_GetEmail(){
         String username = "test";
         String email = "test@gmail.com";
@@ -32,6 +34,7 @@ public class UnitTest {
         assertEquals(expected, actual);
     }
     @Test
+    //Überprüft, ob GetItemCount die länge der Liste, die von CustomSearchAdaper kommt richtig bestimmt für eine leere Liste
     public void CustomSearchAdapter_To_GetItemCount_0Items(){
         ArrayList<Contact> list = new ArrayList<>();
         Context context = null;
@@ -41,6 +44,7 @@ public class UnitTest {
         assertEquals(expected, actual);
     }
     @Test
+    //Überprüft, ob GetItemCount die länge der Liste, die von CustomSearchAdaper kommt richtig bestimmt für eine Liste mit 2 Inhalten
     public void CustomSearchAdapter_To_GetItemCount_2Items(){
         ArrayList<Contact> list = new ArrayList<>();
         String username = "test";
