@@ -40,7 +40,7 @@
             android:id="@+id/messageInputField"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:hint="input message"
+            android:hint="@string/input_message"
             android:textSize="20sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
