@@ -90,7 +90,7 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
         ChatAdapter adapter = new ChatAdapter(chatList);
         recyclerView.setAdapter(adapter);
 
-
+        // Wenn man einen Chat na links swiped, wird der Eintrag gelöscht
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT){
             @Override
@@ -132,6 +132,9 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
 
     }
 
+    /**
+     * Lädt die Chat Einträge aus der Datenbank und reloaded den RecycleViewer
+     */
     public void updateChats() {
         ChatDatabase chatDatabase = Room.databaseBuilder(getContext(), ChatDatabase.class, "ChatDatabase")
                 .allowMainThreadQueries().build();
@@ -141,6 +144,9 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
         recyclerView.setAdapter(chatAdapter);
     }
 
+    /**
+     * BroadcastReceiver der benachrichtig wird, wenn eine neue Nachricht empfangen wird und ruft die updateChats() Methode auf
+     */
     public BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

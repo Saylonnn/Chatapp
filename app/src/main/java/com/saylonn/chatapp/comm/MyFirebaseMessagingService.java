@@ -76,6 +76,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Message message = new Message("remoteUser", fromEmail, jsonData.get("messageText"));
             messageDao.insert(message);
 
+            // Zum benachrichtigen der RecycleViewer
             Intent myIntent = new Intent("FBR-update-chats");
             this.sendBroadcast(myIntent);
 
