@@ -1,5 +1,9 @@
 package com.saylonn.chatapp.ui.chats;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +22,7 @@ import androidx.security.crypto.MasterKeys;
 import com.google.android.material.textfield.TextInputEditText;
 import com.saylonn.chatapp.R;
 import com.saylonn.chatapp.chathandler.Chat;
+import com.saylonn.chatapp.chathandler.ChatAdapter;
 import com.saylonn.chatapp.chathandler.ChatDatabase;
 import com.saylonn.chatapp.chathandler.Message;
 import com.saylonn.chatapp.chathandler.MessageAdapter;
@@ -40,11 +45,13 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
     RecyclerView recyclerView;
     Button sendButton;
     TextInputEditText messageField;
+    String chatEmail;
     List<Message> messageList;
     VolleyRequest volleyRequest;
     private final String TAG = "CAPP";
     private SharedPreferences encryptedSP;
     private String masterKeyAlias = null;
+
 
 
     @Override
@@ -53,7 +60,7 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
         setContentView(R.layout.fragment_open_chat);
 
         // Man bekommt das Intent mit der Email auf die man geklickt hat, damit die dazugehörigen Nachrichten geladen werden
-        String chatEmail = this.getIntent().getExtras().getString("chatEmail");
+        chatEmail = this.getIntent().getExtras().getString("chatEmail");
 
         recyclerView = findViewById(R.id.openChatRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -104,25 +111,23 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
         String token = sp.getString(String.valueOf(R.string.token_key), "none");
 
         // Beim klicken auf den Sendebutton wird die Nachricht in die Datenbank gespeichert und mithilfe des VolleyRequests an den entsprechenden User gesendet
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String messageText = messageField.getText().toString().trim();
+        sendButton.setOnClickListener(view -> {
+            String messageText = messageField.getText().toString().trim();
 
-                if(!messageText.equals("")){
-                    Message message = new Message("localUser", chatEmail, messageText);
-                    messageDao.insert(message);
+            if(!messageText.equals("")){
+                Message message = new Message("localUser", chatEmail, messageText);
+                messageDao.insert(message);
 
-                    Log.d(TAG, "targetEmail: " + chatEmail + " message: " + messageText);
-                    volleyRequest.sendMessage(sourceEmail, password, token, chatEmail, messageText, getApplicationContext());
+                Log.d(TAG, "targetEmail: " + chatEmail + " message: " + messageText);
+                volleyRequest.sendMessage(sourceEmail, password, token, chatEmail, messageText, getApplicationContext());
 
-                    messageList.add(message);
-                    MessageAdapter adapter = new MessageAdapter(messageList);
-                    recyclerView.setAdapter(adapter);
-                }
+                messageList.add(message);
+                MessageAdapter adapter1 = new MessageAdapter(messageList);
+                recyclerView.setAdapter(adapter1);
+                messageField.setText("");
+                recyclerView.smoothScrollToPosition(messageList.size() - 1);
             }
         });
-
 
 
     }
@@ -138,5 +143,32 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
     @Override
     public void jsonCallbackMethod(String function, JSONObject json) {
 
+    }
+
+    public void updateMessages() {
+        ChatDatabase chatDatabase = Room.databaseBuilder(this, ChatDatabase.class, "ChatDatabase")
+                .allowMainThreadQueries().build();
+        MessageDao messageDao = chatDatabase.messageDao();
+        List<Message> messageList = messageDao.getAllMessages(chatEmail);
+        MessageAdapter messageAdapter = new MessageAdapter(messageList);
+        recyclerView.setAdapter(messageAdapter);
+    }
+
+    public BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateMessages();
+        }
+    };
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(myReceiver, new IntentFilter("FBR-update-chats"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(myReceiver);
     }
 }

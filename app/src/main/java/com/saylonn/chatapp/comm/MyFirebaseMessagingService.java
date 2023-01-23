@@ -7,17 +7,19 @@ import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Binder;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.room.Room;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -25,19 +27,13 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.saylonn.chatapp.MainActivity;
 import com.saylonn.chatapp.R;
 import com.saylonn.chatapp.chathandler.Chat;
-import com.saylonn.chatapp.chathandler.ChatAdapter;
+
 import com.saylonn.chatapp.chathandler.ChatDao;
 import com.saylonn.chatapp.chathandler.ChatDatabase;
 import com.saylonn.chatapp.chathandler.Message;
 import com.saylonn.chatapp.chathandler.MessageDao;
-import com.saylonn.chatapp.chathandler.MessageEvent;
-import com.saylonn.chatapp.ui.chats.ChatsFragment;
-import com.saylonn.chatapp.ui.chats.OpenChatActivity;
 
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -80,6 +76,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Message message = new Message("remoteUser", fromEmail, jsonData.get("messageText"));
             messageDao.insert(message);
 
+            Intent myIntent = new Intent("FBR-update-chats");
+            this.sendBroadcast(myIntent);
 
         }
         // Wenn sich die App im Hintergrund befindet soll eine Notification angezeigt werden

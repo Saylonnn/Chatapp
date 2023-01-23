@@ -3,6 +3,7 @@ package com.saylonn.chatapp.ui.chats;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,18 +26,14 @@ import com.saylonn.chatapp.chathandler.ChatAdapter;
 import com.saylonn.chatapp.chathandler.ChatDao;
 import com.saylonn.chatapp.chathandler.ChatDatabase;
 import com.saylonn.chatapp.chathandler.MessageDao;
-import com.saylonn.chatapp.chathandler.MessageEvent;
+
 import com.saylonn.chatapp.interfaces.VolleyCallbackListener;
 import com.saylonn.chatapp.databinding.FragmentChatsBinding;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,6 +45,8 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
     private final String TAG = "CAPP";
     private SharedPreferences encrpytedSharedPreferences;
     private String masterKeyAlias = null;
+    RecyclerView recyclerView;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -78,7 +77,7 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
         }
 
         // Alle Chats werden in einem RecylerView aus der ChatDatenbak (Chat Tabelle) geladen
-        RecyclerView recyclerView = root.findViewById(R.id.chat_recycler_view);
+        recyclerView = root.findViewById(R.id.chat_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
@@ -105,9 +104,7 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
                 messageDao.deleteWhereEmail(adapter.getChatAt(viewHolder.getAdapterPosition()).getEmail());
                 chatDao.delete(adapter.getChatAt(viewHolder.getAdapterPosition()));
 
-                List<Chat> chatList1 = chatDao.getAllChats();
-                ChatAdapter adapter1 = new ChatAdapter(chatList1);
-                recyclerView.setAdapter(adapter1);
+                updateChats();
             }
 
         }).attachToRecyclerView(recyclerView);
@@ -120,10 +117,6 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private void setUpChatsModels(){
-
     }
 
     @Override
@@ -139,20 +132,31 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        Toast.makeText(getActivity(), "New message", Toast.LENGTH_SHORT).show();
+    public void updateChats() {
+        ChatDatabase chatDatabase = Room.databaseBuilder(getContext(), ChatDatabase.class, "ChatDatabase")
+                .allowMainThreadQueries().build();
+        ChatDao chatDao = chatDatabase.chatDao();
+        List <Chat> chatList = chatDao.getAllChats();
+        ChatAdapter chatAdapter = new ChatAdapter(chatList);
+        recyclerView.setAdapter(chatAdapter);
+    }
+
+    public BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateChats();
+        }
+    };
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(myReceiver, new IntentFilter("FBR-update-chats"));
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(myReceiver);
     }
 
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
 }
