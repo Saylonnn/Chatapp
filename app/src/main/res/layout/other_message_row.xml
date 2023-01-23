@@ -13,7 +13,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginEnd="60dp"
         android:layout_marginTop="12dp"
-        app:cardBackgroundColor="@color/lime"
+        app:cardBackgroundColor="?colorTertiary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

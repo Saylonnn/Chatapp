@@ -123,7 +123,9 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
 
                 updateMessages();
                 messageField.setText("");
-                recyclerView.smoothScrollToPosition(messageList.size() - 1);
+                if(messageList.size() > 1){
+                    recyclerView.smoothScrollToPosition(messageList.size() - 1);
+                }
             }
         });
 

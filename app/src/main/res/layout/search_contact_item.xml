@@ -16,14 +16,16 @@
             android:id="@+id/contact_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/black"/>
 
         <TextView
 
             android:id="@+id/contact_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/black"/>
 
         <ImageButton
             android:id="@+id/searchRcButton"
@@ -32,7 +34,7 @@
             android:textSize="22sp"
             android:layout_gravity="center"
             android:src="@drawable/ic_baseline_add_24"
-            android:background="@color/lime"/>
+            android:background="?colorPrimary"/>
     </LinearLayout>
 
 
