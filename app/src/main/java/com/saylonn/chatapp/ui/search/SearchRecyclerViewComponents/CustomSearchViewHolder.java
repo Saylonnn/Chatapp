@@ -55,7 +55,7 @@ public class CustomSearchViewHolder extends RecyclerView.ViewHolder{
             chatDao.insert(chat);
             Toast.makeText(itemView.getContext(), R.string.user_added, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(itemView.getContext(), "User already saved.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(itemView.getContext(), R.string.user_already_saved, Toast.LENGTH_SHORT).show();
         }
 
 

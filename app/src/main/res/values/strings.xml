@@ -16,37 +16,37 @@
     <string name="token_key" translatable="false">fcm_token</string>
     <string name="serverErrorMessage" translatable="false">Server Error</string>
     <string name="ok" translatable="false">OK</string>
-    <string name="notification_not_allowed_error_text">Notifications are not active and can´t be showen</string>
+    <string name="notification_not_allowed_error_text">Notifications are not active and can´t be shown</string>
     <string name="login_status" translatable="false">login_status</string>
     <string name="empty_field_message">Fill in all fields</string>
     <string name="connectToInternet">Please connect with the internet</string>
     <string name="login_username" translatable="false">login_username</string>
     <string name="login_password" translatable="false">login_password</string>
     <string name="login_email" translatable="false">login_email</string>
-    <string name="want_registration">no account yet?</string>
+    <string name="want_registration">No account yet?</string>
     <string name="registration">Register</string>
-    <string name="retype_password_hint">repeat password</string>
+    <string name="retype_password_hint">Repeat password</string>
     <string name="username" translatable="false">Username</string>
     <string name="profile_username" translatable="false">Username:</string>
     <string name="profile_email" translatable="false">Email:</string>
     <string name="logout_string">Logout</string>
     <string name="username_hint" translatable="false">Username</string>
-    <string name="login_status_logged_in">login</string>
+    <string name="login_status_logged_in">Login</string>
     <string name="login_error_empty_field">Please fill out the fields</string>
     <string name="login_status_declined">Wrong email or password</string>
-    <string name="passwords_must_be_equals">passwords need to be identical</string>
+    <string name="passwords_must_be_equals">Passwords need to be identical</string>
     <string name="field_not_empty_allowed">Field cannot be empty</string>
-    <string name="correct_password_length">password must be between 8 and 20characters</string>
-    <string name="account_created">Create Account.</string>
-    <string name="faulty_input">incorrect input</string>
+    <string name="correct_password_length">Password must be between 8 and 20 characters</string>
+    <string name="account_created">Create Account</string>
+    <string name="faulty_input">Incorrect input</string>
     <string name="email_already_in_use">Email not available</string>
     <string name="default_notification_channel_id" translatable="false">default_notification_channel</string>
     <string name="notification_id" translatable="false">notification_id</string>
     <string name="target_adress_not_available">Emailadress not available</string>
     <string name="darkmode" translatable="false">Darkmode</string>
     <string name="language">Language: </string>
-    <string name="user_added">Contact Added.</string>
-    <string name="user_already_saved">Contact is already saved.</string>
+    <string name="user_added">Contact Added</string>
+    <string name="user_already_saved">Contact is already saved</string>
     <string name="input_message">Input message</string>
     <string-array name="languagesArray">
         <item>English</item>
