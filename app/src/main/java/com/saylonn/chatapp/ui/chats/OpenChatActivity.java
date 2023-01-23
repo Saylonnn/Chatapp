@@ -145,6 +145,9 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
 
     }
 
+    /**
+     * Lädt die Nachrichten Einträge aus der Datenbank und reloaded den RecycleViewer
+     */
     public void updateMessages() {
         ChatDatabase chatDatabase = Room.databaseBuilder(this, ChatDatabase.class, "ChatDatabase")
                 .allowMainThreadQueries().build();
@@ -154,6 +157,9 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
         recyclerView.setAdapter(messageAdapter);
     }
 
+    /**
+     * BroadcastReceiver der benachrichtig wird, wenn eine neue Nachricht empfangen wird und ruft die updateMessages() Methode auf
+     */
     public BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
