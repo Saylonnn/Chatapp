@@ -43,8 +43,7 @@ public class SettingsFragment extends Fragment {
 
     private Switch switchForDarkmode;
 
-    private Spinner spinnerLanguages;;
-
+    private Spinner spinnerLanguage;;
 
     SharedPreferences sharedPreferences;
 
@@ -71,24 +70,21 @@ public class SettingsFragment extends Fragment {
                 if (isChecked) {
                     // Dark Mode aktivieren
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    //getActivity().setTheme(R.style.Theme_Chatapp);
-                    sharedPreferences.edit().putBoolean("isDarKMode", true).apply();
+                    sharedPreferences.edit().putBoolean("isDarkMode", true).apply();
                 } else {
                     // Dark Mode deaktivieren
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    //getActivity().setTheme(R.style.Theme_Chatapp);
                     sharedPreferences.edit().putBoolean("isDarkMode", false).apply();
                 }
-                //requireActivity().recreate();
             }
         });
 
-        spinnerLanguages = (Spinner) root.findViewById(R.id.spinnerLanguage);
+        /*spinnerLanguage = (Spinner) root.findViewById(R.id.spinnerLanguage);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.languagesArray, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_item);
-        spinnerLanguages.setAdapter(adapter);
+        spinnerLanguage.setAdapter(adapter);
 
-        spinnerLanguages.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -99,27 +95,26 @@ public class SettingsFragment extends Fragment {
 
                 if (selectedLanguage.equals("English")){
                     locale = Locale.ENGLISH;
+                    languageToLoad = "en";
                 }else if(selectedLanguage.equals("Deutsch")){
                     locale = Locale.GERMANY;
+                    languageToLoad = "de";
                 }
+                Log.d("XXX", locale.toString());
                 if (languageToLoad!= null){
-                    Log.d("XXX", "Test");
                     locale = new Locale(languageToLoad);
                     Locale.setDefault(locale);
                     Configuration configuration = new Configuration();
                     configuration.setLocale(locale);
                     Context context = getContext().createConfigurationContext(configuration);
-
-                    //AppCompatDelegate.setApplicationLocales(appLocale);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
-
+        */
 
         return root;
     }
