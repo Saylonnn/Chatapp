@@ -21,5 +21,15 @@
     <string name="switch_off">Aus</string>
     <string name="user_added">Kontakt hinzugefügt.</string>
     <string name="user_already_saved">Kontakt wurde bereits gespeichert.</string>
+    <string name="dialog_login_message">Bitte Einloggem</string>
+    <string name="password">Passwort</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_profile">Profil</string>
+    <string name="title_search">Suche</string>
+    <string name="login_btn">Einloggem</string>
+    <string name="cancel_btn">Abbruch</string>
+    <string name="login_title">Einloggem</string>
+    <string name="password_hint">Passwort</string>
+    <string name="logout_string">Ausloggen</string>
 
 </resources>
