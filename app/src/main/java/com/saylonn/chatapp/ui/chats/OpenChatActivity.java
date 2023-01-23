@@ -121,9 +121,7 @@ public class OpenChatActivity extends AppCompatActivity implements VolleyCallbac
                 Log.d(TAG, "targetEmail: " + chatEmail + " message: " + messageText);
                 volleyRequest.sendMessage(sourceEmail, password, token, chatEmail, messageText, getApplicationContext());
 
-                messageList.add(message);
-                MessageAdapter adapter1 = new MessageAdapter(messageList);
-                recyclerView.setAdapter(adapter1);
+                updateMessages();
                 messageField.setText("");
                 recyclerView.smoothScrollToPosition(messageList.size() - 1);
             }
