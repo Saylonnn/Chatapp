@@ -36,4 +36,7 @@ public interface MessageDao {
     @Query("SELECT * FROM message WHERE chatEmail = :chatEmail ORDER BY id ASC")
     List<Message> getAllMessages(String chatEmail);
 
+    @Query("DELETE FROM message WHERE chatEmail = :chatEmail")
+    void deleteWhereEmail(String chatEmail);
+
 }

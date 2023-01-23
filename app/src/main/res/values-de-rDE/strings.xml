@@ -19,5 +19,7 @@
     <string name="language">Sprache: </string>
     <string name="switch_on">An</string>
     <string name="switch_off">Aus</string>
+    <string name="user_added">Kontakt hinzugefügt.</string>
+    <string name="user_already_saved">Kontakt wurde bereits gespeichert.</string>
 
 </resources>

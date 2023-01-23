@@ -47,11 +47,13 @@
     <string name="language">Language: </string>
     <string name="switch_on">On</string>
     <string name="switch_off">Off</string>
-
+    <string name="user_added">Contact Added.</string>
+    <string name="user_already_saved">Contact is already saved.</string>
     <string-array name="languagesArray">
         <item>English</item>
         <item>Deutsch</item>
     </string-array>
+
 
 
 </resources>

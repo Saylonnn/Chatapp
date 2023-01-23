@@ -13,6 +13,6 @@
         android:id="@+id/chat_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/my_row_all_chats"/>
+        tools:listitem="@layout/my_row_all_chats" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

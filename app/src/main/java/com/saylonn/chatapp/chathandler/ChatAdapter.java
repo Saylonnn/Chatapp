@@ -76,4 +76,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
             textViewLastMessage = itemView.findViewById(R.id.last_message_txt);
         }
     }
+
+    public Chat getChatAt(int position) {
+        return chats.get(position);
+    }
 }

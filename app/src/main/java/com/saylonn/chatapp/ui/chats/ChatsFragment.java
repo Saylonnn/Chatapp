@@ -1,5 +1,8 @@
 package com.saylonn.chatapp.ui.chats;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -20,9 +24,14 @@ import com.saylonn.chatapp.chathandler.Chat;
 import com.saylonn.chatapp.chathandler.ChatAdapter;
 import com.saylonn.chatapp.chathandler.ChatDao;
 import com.saylonn.chatapp.chathandler.ChatDatabase;
+import com.saylonn.chatapp.chathandler.MessageDao;
+import com.saylonn.chatapp.chathandler.MessageEvent;
 import com.saylonn.chatapp.interfaces.VolleyCallbackListener;
 import com.saylonn.chatapp.databinding.FragmentChatsBinding;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -42,6 +51,7 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
 
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -81,6 +91,27 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
         ChatAdapter adapter = new ChatAdapter(chatList);
         recyclerView.setAdapter(adapter);
 
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT){
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                MessageDao messageDao = chatDatabase.messageDao();
+                messageDao.deleteWhereEmail(adapter.getChatAt(viewHolder.getAdapterPosition()).getEmail());
+                chatDao.delete(adapter.getChatAt(viewHolder.getAdapterPosition()));
+
+                List<Chat> chatList1 = chatDao.getAllChats();
+                ChatAdapter adapter1 = new ChatAdapter(chatList1);
+                recyclerView.setAdapter(adapter1);
+            }
+
+        }).attachToRecyclerView(recyclerView);
+
         return root;
     }
 
@@ -108,4 +139,20 @@ public class ChatsFragment extends Fragment implements VolleyCallbackListener {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        Toast.makeText(getActivity(), "New message", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
 }

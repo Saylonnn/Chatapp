@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -52,7 +53,11 @@ public class CustomSearchViewHolder extends RecyclerView.ViewHolder{
         if(!chatDao.isRowIsExist(email)) {
             Chat chat = new Chat(username, email, "");
             chatDao.insert(chat);
+            Toast.makeText(itemView.getContext(), R.string.user_added, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(itemView.getContext(), "User already saved.", Toast.LENGTH_SHORT).show();
         }
+
 
     }
 

@@ -17,6 +17,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.room.Room;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -24,12 +25,19 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.saylonn.chatapp.MainActivity;
 import com.saylonn.chatapp.R;
 import com.saylonn.chatapp.chathandler.Chat;
+import com.saylonn.chatapp.chathandler.ChatAdapter;
 import com.saylonn.chatapp.chathandler.ChatDao;
 import com.saylonn.chatapp.chathandler.ChatDatabase;
 import com.saylonn.chatapp.chathandler.Message;
 import com.saylonn.chatapp.chathandler.MessageDao;
+import com.saylonn.chatapp.chathandler.MessageEvent;
+import com.saylonn.chatapp.ui.chats.ChatsFragment;
+import com.saylonn.chatapp.ui.chats.OpenChatActivity;
 
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -44,6 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         String fromUser = "";
         String title;
+        String fromEmail = "";
 
         super.onMessageReceived(remoteMessage);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -51,8 +60,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Map<String, String> jsonData = remoteMessage.getData();
             Log.d(TAG, "map: " + jsonData);
-            Log.d(TAG, "from user: " + jsonData.get("fromUser"));
-            fromUser = jsonData.get("fromUser");
+            Log.d(TAG, "from user: " + jsonData.get("fromUsername"));
+            fromUser = jsonData.get("fromUsername");
+            fromEmail = jsonData.get("fromEmail");
 
             ChatDatabase chatDatabase = Room.databaseBuilder(this, ChatDatabase.class, "ChatDatabase")
                     .allowMainThreadQueries().build();
@@ -60,15 +70,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             ChatDao chatDao = chatDatabase.chatDao();
 
             // Wenn der User noch keinen Tabelleneintrag hat, wird er erst hinzugefügt
-            if(!chatDao.isRowIsExist(fromUser)){
-                Chat chat = new Chat("", fromUser, jsonData.get("messageText"));
+            if(!chatDao.isRowIsExist(fromEmail)){
+                Chat chat = new Chat(fromUser, fromEmail, jsonData.get("messageText"));
                 chatDao.insert(chat);
             }
 
             // Es wird eine neue Nachricht erstellt und in die Message Tabelle hinzugefügt
             MessageDao messageDao = chatDatabase.messageDao();
-            Message message = new Message("remoteUser", fromUser, jsonData.get("messageText"));
+            Message message = new Message("remoteUser", fromEmail, jsonData.get("messageText"));
             messageDao.insert(message);
+
 
         }
         // Wenn sich die App im Hintergrund befindet soll eine Notification angezeigt werden
@@ -132,4 +143,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         ActivityManager.getMyMemoryState(appProcessInfo);
         return (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE);
     }
+
 }
